@@ -34,7 +34,6 @@ export function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#ffcc04] via-[#ffcc04] to-[#ffcc04] p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
       {/* <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" style={{ backgroundColor: '#ECBE07FF'}}></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" style={{ backgroundColor: '#FDCC0AFF4'}}></div>
@@ -141,7 +140,6 @@ export function LoginForm() {
             </CardContent>
           </Card>
         </div>
-        {/* Left Side - Branding */}
         <div className="hidden lg:block space-y-8 animate-slide-in">
           <div className="space-y-4">
             <div className="flex items-center space-x-3 space-x-reverse">

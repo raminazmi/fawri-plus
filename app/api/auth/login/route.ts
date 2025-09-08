@@ -11,8 +11,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-
-    // Authenticate user with external API
     const authResult = await authenticate(email, password)
     
     if (!authResult) {
@@ -21,8 +19,6 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
-
-    // Return user data and external token
     return NextResponse.json({
       success: true,
       user: {
@@ -34,7 +30,6 @@ export async function POST(request: NextRequest) {
       token: authResult.token
     })
   } catch (error) {
-    console.error("Login error:", error)
     return NextResponse.json(
       { error: "حدث خطأ في الخادم" },
       { status: 500 }

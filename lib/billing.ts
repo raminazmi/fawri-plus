@@ -253,8 +253,6 @@ export const addPayment = async (paymentData: Omit<Payment, "id" | "createdAt">)
   }
 
   mockPayments.push(newPayment)
-
-  // Add corresponding transaction
   const paymentTransaction: BillingTransaction = {
     id: (Date.now() + 1).toString(),
     customerId: paymentData.customerId,
@@ -302,48 +300,33 @@ export const getInvoices = async (filters?: {
 
 export const generateInvoice = async (customerId: string, periodStart: string, periodEnd: string): Promise<Invoice> => {
   await new Promise((resolve) => setTimeout(resolve, 1200))
-
-  // Get customer billing settings
   const billingSettings = mockBillingSettings.find((s) => s.customerId === customerId)
   if (!billingSettings) {
     throw new Error("Customer billing settings not found")
   }
-
-  // Get transactions for the period
   const transactions = await getBillingTransactions({
     customerId,
     startDate: periodStart,
     endDate: periodEnd,
   })
-
-  // Get payments for the period
   const payments = await getPayments({
     customerId,
     startDate: periodStart,
     endDate: periodEnd,
   })
-
-  // Calculate amounts
   const subscriptionAmount = transactions.filter((t) => t.type === "subscription").reduce((sum, t) => sum + t.amount, 0)
-
   const orderFeesAmount = transactions.filter((t) => t.type === "order_fee").reduce((sum, t) => sum + t.amount, 0)
-
   const additionalServicesAmount = transactions
     .filter((t) => t.type === "additional_service")
     .reduce((sum, t) => sum + t.amount, 0)
-
   const cashDeductionAmount = transactions
     .filter((t) => t.type === "cash_deduction")
     .reduce((sum, t) => sum + t.amount, 0)
-
   const subtotal = subscriptionAmount + orderFeesAmount + additionalServicesAmount + cashDeductionAmount
   const taxAmount = (subtotal * billingSettings.taxRate) / 100
   const totalAmount = subtotal + taxAmount
-
   const paidAmount = payments.reduce((sum, p) => sum + p.amount, 0)
   const remainingAmount = totalAmount - paidAmount
-
-  // Calculate due date
   const issueDate = new Date()
   const dueDate = new Date(issueDate)
   dueDate.setDate(dueDate.getDate() + billingSettings.defaultPaymentTerms)

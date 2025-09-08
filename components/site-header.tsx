@@ -4,9 +4,7 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { MapPin, Phone, Building2, Info, Package } from "lucide-react"
-
 import logoImg from "../public/images/logo.svg" 
-
 import heroImg from "../public/images/hero-image.svg"
 
 type SiteHeaderProps = {
@@ -16,11 +14,9 @@ type SiteHeaderProps = {
 export function SiteHeader({ showHero = false }: SiteHeaderProps) {
   return (
     <div className="w-full">
-      {/* شريط علوي بمعلومات الشركة والتواصل */}
       <div className="w-full bg-[#574b9f] text-[#ececec] border-b border-[#d2d2d2]">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 py-2">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            {/* يمين: اللوجو واسم الشركة + معلومات الشركة */}
             <div className="flex items-center gap-3 text-right sm:text-left flex-grow">
               <Image
                 src={logoImg}
@@ -35,7 +31,6 @@ export function SiteHeader({ showHero = false }: SiteHeaderProps) {
               </div>
             </div>
 
-            {/* يسار: وسائل التواصل والعنوان */}
             <div className="flex items-center gap-3 justify-center sm:justify-end">
               <Link
                 href="tel:33831996"
@@ -63,7 +58,6 @@ export function SiteHeader({ showHero = false }: SiteHeaderProps) {
         </div>
       </div>
 
-      {/* شريط الهيدر الرئيسي - فارغ لصفحة تسجيل الدخول */}
       {/* <div className="w-full bg-[#ececec] border-b border-[#d2d2d2] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4 flex items-center justify-end">
           <nav className="flex items-center gap-6">
@@ -78,11 +72,9 @@ export function SiteHeader({ showHero = false }: SiteHeaderProps) {
         </div>
       </div> */}
 
-      {/* هيرو اختياري بالصور */}
       {showHero && (
         <div className="relative w-full h-48 sm:h-60 md:h-72 lg:h-80 overflow-hidden bg-gradient-to-r from-[#574b9f] via-[#574b9f]/90 to-[#574b9f]/70">
           <div className="max-w-7xl mx-auto px-4 lg:px-6 h-full flex items-center justify-between">
-            {/* الصورة على اليسار */}
             <div className="relative h-full w-full max-w-[400px] flex-shrink-0">
               <Image
                 src={heroImg}
@@ -94,7 +86,6 @@ export function SiteHeader({ showHero = false }: SiteHeaderProps) {
               />
             </div>
             
-            {/* المحتوى على اليمين */}
             <div className="flex flex-col items-end text-right max-w-xl pr-4">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#59c5c7] text-[#272626] px-3 py-1 text-xs font-bold shadow-md">
                 <Info className="h-3.5 w-3.5 text-[#272626]" /> 

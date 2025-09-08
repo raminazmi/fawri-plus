@@ -127,7 +127,6 @@ export function SettingsPage() {
         </Alert>
       )}
 
-      {/* Header */}
       <div className="bg-gradient-to-r from-[#ffcc04] to-[#ffcc04] rounded-2xl p-6 text-white shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>

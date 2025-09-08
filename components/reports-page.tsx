@@ -68,7 +68,6 @@ export function ReportsPage() {
         </Alert>
       )}
 
-      {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-white shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -86,7 +85,6 @@ export function ReportsPage() {
         </div>
       </div>
 
-      {/* Filters */}
       <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader className="bg-gradient-to-r from-gray-50 to-indigo-50">
           <CardTitle className="flex items-center gap-2">

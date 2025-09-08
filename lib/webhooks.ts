@@ -17,7 +17,6 @@ export interface WebhookConfig {
   events: string[]
 }
 
-// Mock webhook configurations - in real app, this would be stored in database
 let webhookConfigs: WebhookConfig[] = [
   {
     url: "https://your-app.com/api/webhooks/shipday",
@@ -56,9 +55,6 @@ export const deleteWebhookConfig = (index: number): boolean => {
 
 export const processWebhookPayload = async (payload: WebhookPayload): Promise<void> => {
   try {
-    console.log("[Webhook] Processing payload:", payload)
-    
-    // Map Shipday status to normalized status
     const statusMap: Record<string, NormalizedStatus> = {
       "NOT_ASSIGNED": "pending",
       "ORDER_PLACED": "pending",
@@ -75,18 +71,8 @@ export const processWebhookPayload = async (payload: WebhookPayload): Promise<vo
     }
     
     const normalizedStatus = statusMap[payload.status] || "pending"
-    
-    // Update order status in our system
-    // TODO: Implement order status update via API
-    console.log(`Updating order ${payload.orderNumber} status to ${normalizedStatus}`)
-    
-    console.log(`[Webhook] Updated order ${payload.orderNumber} to status: ${normalizedStatus}`)
-    
-    // Send notifications to enabled webhooks
     await sendWebhookNotifications(payload)
-    
   } catch (error) {
-    console.error("[Webhook] Error processing payload:", error)
     throw error
   }
 }
@@ -98,7 +84,6 @@ export const sendWebhookNotifications = async (payload: WebhookPayload): Promise
     try {
       await sendWebhook(config, payload)
     } catch (error) {
-      console.error(`[Webhook] Failed to send to ${config.url}:`, error)
     }
   }
 }
@@ -126,11 +111,7 @@ const sendWebhook = async (config: WebhookConfig, payload: WebhookPayload): Prom
   if (!response.ok) {
     throw new Error(`Webhook failed: ${response.status} ${response.statusText}`)
   }
-  
-  console.log(`[Webhook] Successfully sent to ${config.url}`)
 }
-
-// Simulate receiving webhook from Shipday
 export const simulateShipdayWebhook = async (orderNumber: string, status: string): Promise<void> => {
   const payload: WebhookPayload = {
     orderId: Math.floor(Math.random() * 1000),

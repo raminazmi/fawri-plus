@@ -19,7 +19,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check for stored auth on mount
     const checkAuth = () => {
       try {
         const storedUser = localStorage.getItem("auth_user")
@@ -38,8 +37,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           })
         }
       } catch (error) {
-        console.error("Auth check failed:", error)
-        // Clear invalid data
         localStorage.removeItem("auth_user")
         localStorage.removeItem("auth_token")
         setAuthState({ 
@@ -52,8 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     checkAuth()
-
-    // Listen for localStorage changes (for multiple tabs)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'auth_user' || e.key === 'auth_token') {
         checkAuth()
@@ -72,12 +67,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const authResult = await authenticate(email, password)
       if (authResult) {
-        // Save to localStorage first
         localStorage.setItem("auth_user", JSON.stringify(authResult.user))
         localStorage.setItem("auth_token", authResult.token)
-        
-        // Update state
-        setAuthState({ user: authResult.user, isAuthenticated: true })
+                setAuthState({ user: authResult.user, isAuthenticated: true })
         
         setLoading(false)
         return true
@@ -85,7 +77,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false)
       return false
     } catch (error) {
-      console.error("Login error:", error)
       setLoading(false)
       return false
     }
@@ -97,7 +88,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem("auth_user")
       localStorage.removeItem("auth_token")
     } catch (error) {
-      console.error("Logout error:", error)
     } finally {
       setAuthState({ user: null, isAuthenticated: false })
     }

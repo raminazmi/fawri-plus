@@ -18,21 +18,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // In a real application, you would:
-    // 1. Verify the reset token
-    // 2. Check if the token is not expired
-    // 3. Update the user's password in the database
-    // 4. Invalidate the reset token
-
-    // For now, we'll simulate the process
-    console.log(`Password reset with token: ${token}`)
-
     return NextResponse.json({
       success: true,
       message: "تم تغيير كلمة المرور بنجاح"
     })
   } catch (error) {
-    console.error("Reset password error:", error)
     return NextResponse.json(
       { error: "حدث خطأ في الخادم" },
       { status: 500 }

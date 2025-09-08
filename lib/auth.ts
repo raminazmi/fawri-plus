@@ -11,8 +11,6 @@ export interface AuthState {
   user: User | null
   isAuthenticated: boolean
 }
-
-// Real users storage - will be synchronized with users.ts
 let realUsers: Record<string, { password: string; user: User }> = {
   admin: {
     password: "admin123",
@@ -42,8 +40,6 @@ let realUsers: Record<string, { password: string; user: User }> = {
     },
   },
 }
-
-// Add user to authentication system
 export const addUserToAuth = (userData: { id: string; username: string; email: string; password: string; role: UserRole; createdAt: Date }) => {
   realUsers[userData.username] = {
     password: userData.password,
@@ -54,7 +50,6 @@ export const addUserToAuth = (userData: { id: string; username: string; email: s
       createdAt: userData.createdAt,
     },
   }
-  // Also allow login with email
   realUsers[userData.email] = {
     password: userData.password,
     user: {
@@ -66,14 +61,10 @@ export const addUserToAuth = (userData: { id: string; username: string; email: s
   }
 }
 
-// Update user in authentication system
 export const updateUserInAuth = (oldUsername: string, oldEmail: string, userData: { id: string; username: string; email: string; password?: string; role: UserRole; createdAt: Date }) => {
-  // Remove old entries
   delete realUsers[oldUsername]
   delete realUsers[oldEmail]
-  
-  // Add updated entries
-  const password = userData.password || realUsers[oldUsername]?.password || "defaultPassword123"
+    const password = userData.password || realUsers[oldUsername]?.password || "defaultPassword123"
   realUsers[userData.username] = {
     password,
     user: {
@@ -94,7 +85,6 @@ export const updateUserInAuth = (oldUsername: string, oldEmail: string, userData
   }
 }
 
-// Delete user from authentication system
 export const deleteUserFromAuth = (username: string, email: string) => {
   delete realUsers[username]
   delete realUsers[email]
@@ -117,9 +107,7 @@ export const authenticate = async (email: string, password: string): Promise<{us
 
     if (response.ok) {
       const data = await response.json()
-      
-      // Map the external API response to our User interface
-      const user = {
+            const user = {
         id: data.user.id.toString(),
         username: data.user.name || data.user.email,
         role: data.user.role || "manager", // Default role if not provided
@@ -134,18 +122,13 @@ export const authenticate = async (email: string, password: string): Promise<{us
     
     return null
   } catch (error) {
-    console.error("Authentication error:", error)
     return null
   }
 }
 
 export const hasPermission = (user: User | null, action: string): boolean => {
   if (!user) return false
-
-  // Admin has all permissions
   if (user.role === "admin") return true
-
-  // Manager permissions - cannot delete data, add users, or change permissions
   if (user.role === "manager") {
     const restrictedActions = ["delete", "add_user", "change_permissions"]
     return !restrictedActions.some((restricted) => action.includes(restricted))

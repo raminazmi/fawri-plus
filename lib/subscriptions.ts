@@ -20,33 +20,22 @@ export interface SubscriptionPlan {
   subscriptionType: SubscriptionType
   billingPeriod: BillingPeriod
   customPeriodDays?: number
-
-  // Subscription details
   startDate: string
   endDate: string
   totalOrders: number
   subscriptionPrice: number
-
-  // Out-of-subscription pricing
   outOfSubscriptionSameDayPrice: number
   outOfSubscriptionDirectPrice: number
-
-  // Cross-type handling
   crossTypeHandling: "fixed_fee" | "deduct_orders"
   crossTypeSameDayFee?: number
   crossTypeDirectFee?: number
   crossTypeOrdersDeducted?: number
-
-  // Unused orders policy
   unusedOrdersPolicy: UnusedOrdersPolicy
   carryOverPercentage?: number
   carryOverNumber?: number
   extensionDays?: number
-
-  // Status
   status: "active" | "expired" | "cancelled"
   autoRenew: boolean
-
   createdAt: Date
   updatedAt: Date
 }
@@ -79,8 +68,6 @@ export interface SubscriptionSummary {
   status: "active" | "expired" | "cancelled"
   nextBillingDate?: string
 }
-
-// Mock data
 const mockCustomers: Customer[] = [
   {
     id: "1",
@@ -321,25 +308,19 @@ export const processOrderUsage = async (
   orderData: { orderId: string; orderNumber: string; orderDate: string },
 ): Promise<{ deductedOrders: number; additionalFee: number; subscriptionId?: string }> => {
   await new Promise((resolve) => setTimeout(resolve, 500))
-
-  // Find active subscription for customer
   const activeSubscription = mockSubscriptions.find((sub) => sub.customerId === customerId && sub.status === "active")
-
   if (!activeSubscription) {
-    // No active subscription - charge full price
     return {
       deductedOrders: 0,
-      additionalFee: orderType === "same-day" ? 8.0 : 12.0, // Default pricing
+      additionalFee: orderType === "same-day" ? 8.0 : 12.0,
     }
   }
 
-  // Check if order date is within subscription period
   const orderDate = new Date(orderData.orderDate)
   const subscriptionStart = new Date(activeSubscription.startDate)
   const subscriptionEnd = new Date(activeSubscription.endDate)
 
   if (orderDate < subscriptionStart || orderDate > subscriptionEnd) {
-    // Order outside subscription period
     return {
       deductedOrders: 0,
       additionalFee:
@@ -350,16 +331,12 @@ export const processOrderUsage = async (
     }
   }
 
-  // Calculate current usage
   const currentUsage = mockUsage.filter((u) => u.subscriptionId === activeSubscription.id)
   const usedOrders = currentUsage.reduce((sum, u) => sum + u.deductedOrders, 0)
   const remainingOrders = activeSubscription.totalOrders - usedOrders
 
-  // Check if order type matches subscription type
   if (orderType === activeSubscription.subscriptionType) {
-    // Same type as subscription
     if (remainingOrders > 0) {
-      // Within subscription limits
       const newUsage: SubscriptionUsage = {
         id: Date.now().toString(),
         subscriptionId: activeSubscription.id,
@@ -381,7 +358,6 @@ export const processOrderUsage = async (
         subscriptionId: activeSubscription.id,
       }
     } else {
-      // Exceeded subscription limits
       const additionalFee =
         orderType === "same-day"
           ? activeSubscription.outOfSubscriptionSameDayPrice
@@ -409,7 +385,6 @@ export const processOrderUsage = async (
       }
     }
   } else {
-    // Different type from subscription
     if (activeSubscription.crossTypeHandling === "fixed_fee") {
       const additionalFee =
         orderType === "same-day"
@@ -437,7 +412,6 @@ export const processOrderUsage = async (
         subscriptionId: activeSubscription.id,
       }
     } else {
-      // Deduct orders
       const ordersToDeduct = activeSubscription.crossTypeOrdersDeducted || 1
       if (remainingOrders >= ordersToDeduct) {
         const newUsage: SubscriptionUsage = {
@@ -461,7 +435,6 @@ export const processOrderUsage = async (
           subscriptionId: activeSubscription.id,
         }
       } else {
-        // Not enough orders remaining - charge fee
         const additionalFee =
           orderType === "same-day"
             ? activeSubscription.outOfSubscriptionSameDayPrice

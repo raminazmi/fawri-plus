@@ -48,7 +48,6 @@ export function CashPaymentForm({ drivers, onSubmit, onCancel, loading = false }
 
   return (
     <div className="max-w-md mx-auto">
-      {/* Back Button */}
       <div className="mb-4">
         <Button
           variant="outline"

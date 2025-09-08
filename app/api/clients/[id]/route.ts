@@ -8,7 +8,6 @@ export async function PUT(
 ) {
   try {
     const body = await request.json()
-    // Get authorization header from the request
     const authHeader = request.headers.get("authorization")
     
     const response = await fetch(`${API_BASE_URL}/clients/${params.id}`, {
@@ -28,7 +27,6 @@ export async function PUT(
     const data = await response.json()
     return NextResponse.json(data)
   } catch (error) {
-    console.error("Error updating client:", error)
     return NextResponse.json(
       { error: "Failed to update client" },
       { status: 500 }
@@ -41,7 +39,6 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Get authorization header from the request
     const authHeader = request.headers.get("authorization")
     
     const response = await fetch(`${API_BASE_URL}/clients/${params.id}`, {
@@ -60,7 +57,6 @@ export async function DELETE(
     const data = await response.json()
     return NextResponse.json(data)
   } catch (error) {
-    console.error("Error deleting client:", error)
     return NextResponse.json(
       { error: "Failed to delete client" },
       { status: 500 }

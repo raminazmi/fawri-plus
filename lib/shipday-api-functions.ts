@@ -1,9 +1,5 @@
 import { ShipdayOrder, ShipdayDriver, NormalizedStatus } from './types'
-
-// Re-export types for backward compatibility
 export type { ShipdayOrder, ShipdayDriver, NormalizedStatus }
-
-// Status mapping for UI to API conversion
 const UI_TO_API_STATUS: Record<string, string> = {
   pending: "PENDING",
   assigned: "ASSIGNED", 
@@ -12,15 +8,12 @@ const UI_TO_API_STATUS: Record<string, string> = {
   delivered: "DELIVERED",
   cancelled: "CANCELLED",
 }
-
-// API Functions using direct fetch calls
 export async function fetchOrders(): Promise<ShipdayOrder[]> {
   try {
     const response = await fetch('/api/shipday/orders')
     
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('[API Functions] Error response:', errorText)
       throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
     }
     
@@ -28,7 +21,6 @@ export async function fetchOrders(): Promise<ShipdayOrder[]> {
     
     return Array.isArray(data) ? data : []
   } catch (error) {
-    console.error('Failed to fetch orders:', error)
     throw new Error(`Failed to fetch orders: ${error instanceof Error ? error.message : String(error)}`)
   }
 }
@@ -39,7 +31,6 @@ export async function fetchDrivers(): Promise<ShipdayDriver[]> {
     
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('[API Functions] Drivers error response:', errorText)
       throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
     }
     
@@ -47,17 +38,13 @@ export async function fetchDrivers(): Promise<ShipdayDriver[]> {
     
     return Array.isArray(data) ? data : []
   } catch (error) {
-    console.error('Failed to fetch drivers:', error)
     throw new Error(`Failed to fetch drivers: ${error instanceof Error ? error.message : String(error)}`)
   }
 }
 
 export async function updateOrderStatus(orderId: number, status: NormalizedStatus): Promise<boolean> {
   try {
-    
-    // Convert normalized status to Shipday API status
     const apiStatus = UI_TO_API_STATUS[status] || status.toUpperCase()
-    
     const response = await fetch(`/api/shipday/orders/${orderId}/status`, {
       method: 'PUT',
       headers: {
@@ -73,7 +60,6 @@ export async function updateOrderStatus(orderId: number, status: NormalizedStatu
 
     return true
   } catch (error) {
-    console.error(`Failed to update order ${orderId} status:`, error)
     return false
   }
 }
@@ -96,7 +82,6 @@ export async function assignOrderToDriver(orderId: number, driverId: number): Pr
 
     return true
   } catch (error) {
-    console.error(`Failed to assign order ${orderId} to driver ${driverId}:`, error)
     return false
   }
 }
@@ -118,18 +103,14 @@ export async function addDriver(driverData: Partial<ShipdayDriver>): Promise<Shi
     }
 
     const data = await response.json()
-    console.log('Successfully added driver:', data)
     return data
   } catch (error) {
-    console.error('Failed to add driver:', error)
     throw error
   }
 }
 
 export async function createOrder(orderData: Partial<ShipdayOrder>): Promise<ShipdayOrder> {
-  try {
-    console.log('Creating order:', orderData)
-    
+  try {    
     const response = await fetch('/api/shipday/orders', {
       method: 'POST',
       headers: {
@@ -144,19 +125,14 @@ export async function createOrder(orderData: Partial<ShipdayOrder>): Promise<Shi
     }
 
     const data = await response.json()
-    console.log('Successfully created order:', data)
     return data
   } catch (error) {
-    console.error('Failed to create order:', error)
     throw error
   }
 }
 
-// New function for creating orders with the new format
 export async function createOrderNew(orderData: any): Promise<any> {
-  try {
-    console.log('Creating order with new format:', orderData)
-    
+  try {    
     const response = await fetch('/api/shipday/orders', {
       method: 'POST',
       headers: {
@@ -171,19 +147,13 @@ export async function createOrderNew(orderData: any): Promise<any> {
     }
 
     const data = await response.json()
-    console.log('Successfully created order:', data)
     return data
   } catch (error) {
-    console.error('Failed to create order:', error)
     throw error
   }
 }
-
-// New function for updating orders with the correct format
 export async function updateOrderNew(orderId: string, orderData: any): Promise<any> {
-  try {
-    console.log('Updating order with new format:', orderData)
-    
+  try {    
     const response = await fetch(`/api/shipday/orders/${orderId}`, {
       method: 'PUT',
       headers: {
@@ -198,18 +168,14 @@ export async function updateOrderNew(orderId: string, orderData: any): Promise<a
     }
 
     const data = await response.json()
-    console.log('Successfully updated order:', data)
     return data
   } catch (error) {
-    console.error('Failed to update order:', error)
     throw error
   }
 }
 
 export async function updateOrder(orderId: number, orderData: Partial<ShipdayOrder>): Promise<ShipdayOrder> {
   try {
-    console.log('Updating order:', orderId, orderData)
-    
     const response = await fetch(`/api/shipday/orders/${orderId}`, {
       method: 'PUT',
       headers: {
@@ -224,18 +190,14 @@ export async function updateOrder(orderId: number, orderData: Partial<ShipdayOrd
     }
 
     const data = await response.json()
-    console.log('Successfully updated order:', data)
     return data
   } catch (error) {
-    console.error('Failed to update order:', error)
     throw error
   }
 }
 
 export async function deleteOrder(orderId: number): Promise<boolean> {
-  try {
-    console.log('Deleting order:', orderId)
-    
+  try {    
     const response = await fetch(`/api/shipday/orders/${orderId}`, {
       method: 'DELETE',
     })
@@ -244,20 +206,15 @@ export async function deleteOrder(orderId: number): Promise<boolean> {
       const errorText = await response.text()
       throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
     }
-
-    console.log('Successfully deleted order:', orderId)
     return true
   } catch (error) {
-    console.error('Failed to delete order:', error)
     throw error
   }
 }
 
 
 export async function updateOrderStatusAPI(orderId: number, status: string): Promise<boolean> {
-  try {
-    console.log('Updating order status:', orderId, status)
-    
+  try {    
     const response = await fetch(`/api/shipday/orders/${orderId}/status`, {
       method: 'PUT',
       headers: {
@@ -270,16 +227,12 @@ export async function updateOrderStatusAPI(orderId: number, status: string): Pro
       const errorText = await response.text()
       throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
     }
-
-    console.log('Successfully updated order status:', orderId, status)
     return true
   } catch (error) {
-    console.error('Failed to update order status:', error)
     throw error
   }
 }
 
-// Legacy function for backward compatibility
 export async function getShipdaySDK() {
   return {
     getOrders: fetchOrders,

@@ -16,18 +16,9 @@ export function TestOrderCreation() {
     try {
       setLoading(true)
       setResult(null)
-
-      // Get the test order data
       const orderData = createOrderWithProvidedData()
-      
-      // Format it for Shipday API
-      const formattedOrder = formatOrderForShipday(orderData)
-      
-      console.log("Creating order with data:", formattedOrder)
-      
-      // Send to Shipday API
-      const response = await createOrderNew(formattedOrder)
-      
+            const formattedOrder = formatOrderForShipday(orderData)
+                  const response = await createOrderNew(formattedOrder)
       setResult({
         type: "success",
         message: "تم إنشاء الطلب بنجاح!",

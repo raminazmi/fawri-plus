@@ -7,8 +7,6 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"
 export async function POST(request: NextRequest) {
   try {
     const { username, email, password, role } = await request.json()
-
-    // Validation
     if (!username || !email || !password || !role) {
       return NextResponse.json(
         { error: "جميع الحقول مطلوبة" },
@@ -30,13 +28,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user already exists (simple check - in real app, check database)
-    // For now, we'll allow registration and add to auth system
-
-    // Generate unique ID
     const userId = Date.now().toString()
-
-    // Add user to authentication system
     addUserToAuth({
       id: userId,
       username,
@@ -46,7 +38,6 @@ export async function POST(request: NextRequest) {
       createdAt: new Date()
     })
 
-    // Create JWT token
     const token = jwt.sign(
       { 
         userId, 
@@ -57,7 +48,6 @@ export async function POST(request: NextRequest) {
       { expiresIn: "24h" }
     )
 
-    // Set HTTP-only cookie
     const response = NextResponse.json({
       success: true,
       user: {
@@ -72,12 +62,11 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      maxAge: 24 * 60 * 60 * 1000
     })
 
     return response
   } catch (error) {
-    console.error("Registration error:", error)
     return NextResponse.json(
       { error: "حدث خطأ في الخادم" },
       { status: 500 }

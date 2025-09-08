@@ -145,7 +145,6 @@ export function DriverCashPage() {
         </Alert>
       )}
 
-      {/* Header */}
       <div className="bg-gradient-to-r from-[#ffcc04] to-[#ffcc04] rounded-2xl p-6 text-[#272626] shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -162,7 +161,6 @@ export function DriverCashPage() {
         </div>
       </div>
 
-      {/* Filters */}
       <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

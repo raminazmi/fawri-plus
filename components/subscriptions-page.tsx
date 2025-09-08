@@ -119,7 +119,6 @@ export function SubscriptionsPage() {
     try {
       setAddingClient(true)
       setMessage(null)
-      // For adding new client, we need all required fields
       if (!clientData.name || !clientData.email || !clientData.phone) {
         throw new Error("جميع الحقول المطلوبة يجب أن تكون مملوءة")
       }
@@ -179,7 +178,6 @@ export function SubscriptionsPage() {
         </Alert>
       )}
 
-      {/* Header */}
       <div className="bg-gradient-to-r from-[#ffcc04] to-[#ffcc04] rounded-2xl p-6 text-[#272626] shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -205,7 +203,6 @@ export function SubscriptionsPage() {
         </div>
       </div>
 
-      {/* Tabs */}
       <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
         <button
           onClick={() => setActiveTab("subscriptions")}
@@ -229,12 +226,9 @@ export function SubscriptionsPage() {
         </button>
       </div>
 
-      {/* Tab Content */}
       {activeTab === "clients" && <ClientsList />}
-      
       {activeTab === "subscriptions" && (
         <>
-          {/* Filters */}
       <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -279,8 +273,6 @@ export function SubscriptionsPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Subscriptions List */}
       <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -330,7 +322,6 @@ export function SubscriptionsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {/* Usage Progress */}
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">استخدام الطلبات</span>
@@ -344,8 +335,6 @@ export function SubscriptionsPage() {
                     <span>{summary.remainingOrders} طلب متبقي</span>
                   </div>
                 </div>
-
-                {/* Stats */}
                 <div className="grid gap-4 md:grid-cols-4">
                   <div className="space-y-1">
                     <p className="text-sm text-muted-foreground">الأيام المتبقية</p>
@@ -399,7 +388,6 @@ export function SubscriptionsPage() {
         </>
       )}
 
-      {/* Add Client Dialog */}
       <Dialog open={showAddClientDialog} onOpenChange={setShowAddClientDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>

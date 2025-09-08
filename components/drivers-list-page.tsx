@@ -77,7 +77,6 @@ export function DriversListPage() {
       setDrivers(driversData)
       setMessage({ type: "success", text: `تم تحميل ${driversData.length} سائق بنجاح` })
     } catch (error) {
-      console.error("Error loading drivers:", error)
       setMessage({ type: "error", text: "فشل في تحميل بيانات السائقين" })
     } finally {
       setLoading(false)
@@ -91,7 +90,6 @@ export function DriversListPage() {
       setDrivers(driversData)
       setMessage({ type: "success", text: "تم تحديث بيانات السائقين" })
     } catch (error) {
-      console.error("Error refreshing drivers:", error)
       setMessage({ type: "error", text: "فشل في تحديث بيانات السائقين" })
     } finally {
       setRefreshing(false)
@@ -112,7 +110,6 @@ export function DriversListPage() {
       setShowAddDialog(false)
       await loadDrivers()
     } catch (error) {
-      console.error("Error adding driver:", error)
       setMessage({ type: "error", text: "فشل في إضافة السائق" })
     } finally {
       setAddingDriver(false)
@@ -121,8 +118,6 @@ export function DriversListPage() {
 
   const filterDrivers = () => {
     let filtered = drivers
-
-    // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(
         (driver) =>
@@ -132,7 +127,6 @@ export function DriversListPage() {
       )
     }
 
-    // Filter by status
     if (statusFilter !== "all") {
       filtered = filtered.filter((driver) => driver.status === statusFilter)
     }
@@ -155,7 +149,6 @@ export function DriversListPage() {
         </Alert>
       )}
 
-      {/* Header */}
       <div className="bg-gradient-to-r from-[#ffcc04] to-[#ffcc04] rounded-2xl p-6 text-[#272626] shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -182,7 +175,6 @@ export function DriversListPage() {
         </div>
       </div>
 
-      {/* Filters */}
       <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -226,7 +218,6 @@ export function DriversListPage() {
         </CardContent>
       </Card>
 
-      {/* Drivers Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredDrivers.map((driver) => {
           const StatusIcon = statusIcons[driver.status] || AlertCircle
@@ -318,7 +309,6 @@ export function DriversListPage() {
         </Card>
       )}
 
-      {/* Add Driver Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent>
           <DialogHeader>

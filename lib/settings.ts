@@ -25,7 +25,6 @@ export interface AppSettings {
   }
 }
 
-// Mock data for demonstration
 const mockHubs: HubLocation[] = [
   {
     id: "1",

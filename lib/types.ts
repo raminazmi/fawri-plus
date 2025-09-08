@@ -105,7 +105,6 @@ export type NormalizedStatus =
   | "delivered"
   | "cancelled"
 
-// Client Types
 export interface Client {
   id: number
   name: string

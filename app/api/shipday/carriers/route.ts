@@ -40,12 +40,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("[API] Adding new carrier to Shipday...")
-
     const body = await request.json()
-    console.log("[API] Request body:", body)
-
-    // Use API key directly for Basic Auth (as shown in Postman)
     const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
 
     const response = await fetch('https://api.shipday.com/carriers', {
@@ -57,22 +52,17 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body),
     })
 
-    console.log("[API] Shipday response status:", response.status)
-
     if (response.ok) {
       const data = await response.json()
-      console.log("[API] Success! Added carrier:", data)
       return NextResponse.json(data)
     } else {
       const errorText = await response.text()
-      console.log("[API] Error response:", errorText)
       return NextResponse.json(
         { error: `Shipday API Error: ${response.status} ${response.statusText}`, details: errorText },
         { status: response.status }
       )
     }
   } catch (error) {
-    console.error("[API] Request failed:", error)
     return NextResponse.json(
       { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }

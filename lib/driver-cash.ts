@@ -44,8 +44,6 @@ export interface DriverCashSummary {
   pendingOrders: number
 }
 
-
-// Mock data (محتفظ بها مؤقتاً للتطوير)
 const mockCashOrders: CashOrder[] = [
   {
     id: "1",
@@ -114,12 +112,9 @@ export const getDrivers = async (): Promise<Driver[]> => {
 			return acc;
 		}, {} as Record<string, any[]>);
 
-		// دمج بيانات السائقين مع معلومات حالة الطلبات
 		return shipdayDrivers.map((driver) => {
 			const driverOrders = ordersByDriver[driver.id.toString()] || [];
 			const isOnDuty = driverOrders.some(order => order.orderStatus?.orderState === "PICKED_UP" || order.orderStatus?.orderState === "IN_TRANSIT");
-
-			// دعم phone
 			const phone = driver.phone || "";
 
 			return {
@@ -131,7 +126,6 @@ export const getDrivers = async (): Promise<Driver[]> => {
 			};
 		});
 	} catch (error) {
-		console.error("Error fetching drivers from Shipday API:", error)
 		return []
 	}
 }
@@ -144,7 +138,6 @@ export const addDriver = async (driverData: {
   password?: string
 }): Promise<Driver> => {
 		try {
-			// Shipday API expects phoneNumber and temporaryPassword
 			const payload = {
 				name: driverData.name,
 				phoneNumber: driverData.phone,
@@ -160,20 +153,17 @@ export const addDriver = async (driverData: {
 				name: newDriver.name,
 				phone: newDriver.phone,
 				email: newDriver.email,
-				status: "off_duty", // الحالة الافتراضية عند الإضافة
+				status: "off_duty",
 			}
 		} catch (error: any) {
 			let msg = "Error adding driver to Shipday API: " + (error?.message || error)
 			if (error?.message?.includes("400")) {
 				msg = "فشل في إضافة السائق. تحقق من صحة البيانات (الاسم، رقم الهاتف، البريد الإلكتروني، كلمة المرور)."
 			}
-			console.error(msg)
 			throw new Error(msg)
 		}
 }
 
-
-// الدوال التالية تستخدم البيانات الوهمية
 export const getCashOrders = async (filters?: {
   driverId?: string
   startDate?: string

@@ -3,32 +3,22 @@ import { processWebhookPayload, type WebhookPayload } from "@/lib/webhooks"
 
 export async function POST(request: NextRequest) {
   try {
-    // Get the webhook secret from headers
     const webhookSecret = request.headers.get("x-webhook-secret")
     const expectedSecret = process.env.SHIPDAY_WEBHOOK_SECRET || "your-webhook-secret"
-    
-    // Verify webhook secret if provided
-    if (webhookSecret && webhookSecret !== expectedSecret) {
+        if (webhookSecret && webhookSecret !== expectedSecret) {
       return NextResponse.json(
         { error: "Invalid webhook secret" },
         { status: 401 }
       )
     }
-
-    // Parse the webhook payload
     const payload: WebhookPayload = await request.json()
-    
-    console.log("[Webhook] Received payload from Shipday:", payload)
-    
-    // Validate required fields
-    if (!payload.orderNumber || !payload.status) {
+        if (!payload.orderNumber || !payload.status) {
       return NextResponse.json(
         { error: "Missing required fields: orderNumber, status" },
         { status: 400 }
       )
     }
 
-    // Process the webhook payload
     await processWebhookPayload(payload)
     
     return NextResponse.json(
@@ -41,9 +31,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     )
     
-  } catch (error) {
-    console.error("[Webhook] Error processing webhook:", error)
-    
+  } catch (error) {    
     return NextResponse.json(
       { 
         error: "Internal server error",
@@ -54,7 +42,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Handle GET requests for webhook verification
 export async function GET(request: NextRequest) {
   return NextResponse.json(
     { 

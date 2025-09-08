@@ -1,5 +1,4 @@
 "use client"
-
 import type React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -15,7 +14,6 @@ import { fetchClients, createClient, updateClient, deleteClient } from "@/lib/cl
 import { ClientForm } from "@/components/client-form"
 import Loading from "@/components/loading"
 
-Loading
 export function ClientsList() {
   const [clients, setClients] = useState<Client[]>([])
   const [filteredClients, setFilteredClients] = useState<Client[]>([])
@@ -27,12 +25,10 @@ export function ClientsList() {
   const [addingClient, setAddingClient] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
 
-  // Load clients on component mount
   useEffect(() => {
     loadClients()
   }, [])
 
-  // Filter clients based on search term
   useEffect(() => {
     if (!searchTerm.trim()) {
       setFilteredClients(clients)
@@ -68,9 +64,8 @@ export function ClientsList() {
       await createClient(clientData as CreateClientRequest)
       setMessage({ type: "success", text: "تم إضافة العميل بنجاح!" })
       setShowAddDialog(false)
-      await loadClients() // Refresh clients list
+      await loadClients()
     } catch (error) {
-      console.error("Error adding client:", error)
       setMessage({ type: "error", text: "فشل في إضافة العميل" })
     } finally {
       setAddingClient(false)
@@ -89,7 +84,6 @@ export function ClientsList() {
       setEditingClient(null)
       await loadClients() // Refresh clients list
     } catch (error) {
-      console.error("Error updating client:", error)
       setMessage({ type: "error", text: "فشل في تحديث العميل" })
     } finally {
       setAddingClient(false)
@@ -100,14 +94,12 @@ export function ClientsList() {
     if (!confirm(`هل أنت متأكد من حذف العميل "${client.name}"؟`)) {
       return
     }
-
     try {
       setMessage(null)
       await deleteClient(client.id)
       setMessage({ type: "success", text: "تم حذف العميل بنجاح!" })
-      await loadClients() // Refresh clients list
+      await loadClients()
     } catch (error) {
-      console.error("Error deleting client:", error)
       setMessage({ type: "error", text: "فشل في حذف العميل" })
     }
   }
@@ -128,7 +120,6 @@ export function ClientsList() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">إدارة العملاء</h1>
@@ -154,7 +145,6 @@ export function ClientsList() {
         </Dialog>
       </div>
 
-      {/* Message */}
       {message && (
         <Alert className={message.type === "error" ? "border-red-200 bg-red-50" : "border-green-200 bg-green-50"}>
           <AlertDescription className={message.type === "error" ? "text-red-800" : "text-green-800"}>
@@ -163,7 +153,6 @@ export function ClientsList() {
         </Alert>
       )}
 
-      {/* Search */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -184,7 +173,6 @@ export function ClientsList() {
         </CardContent>
       </Card>
 
-      {/* Clients Table */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -264,7 +252,6 @@ export function ClientsList() {
         </CardContent>
       </Card>
 
-      {/* Edit Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>

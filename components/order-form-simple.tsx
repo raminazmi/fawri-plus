@@ -63,7 +63,6 @@ export function OrderFormSimple({ onSubmit, onCancel, loading = false }: OrderFo
 
   return (
     <div className="max-w-2xl mx-auto">
-      {/* Back Button */}
       <div className="mb-4">
         <Button
           variant="outline"
@@ -85,7 +84,6 @@ export function OrderFormSimple({ onSubmit, onCancel, loading = false }: OrderFo
         </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Order Number */}
           <div className="space-y-2">
             <Label htmlFor="orderNumber">رقم الطلب</Label>
             <Input
@@ -99,7 +97,6 @@ export function OrderFormSimple({ onSubmit, onCancel, loading = false }: OrderFo
             />
           </div>
 
-          {/* Customer Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="customerName">اسم العميل *</Label>
@@ -127,7 +124,6 @@ export function OrderFormSimple({ onSubmit, onCancel, loading = false }: OrderFo
             </div>
           </div>
 
-          {/* Pickup Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800">معلومات الاستلام</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -170,7 +166,6 @@ export function OrderFormSimple({ onSubmit, onCancel, loading = false }: OrderFo
             </div>
           </div>
 
-          {/* Delivery Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800">معلومات التوصيل</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -200,7 +195,6 @@ export function OrderFormSimple({ onSubmit, onCancel, loading = false }: OrderFo
             </div>
           </div>
 
-          {/* Order Value and Payment */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="orderValue">قيمة الطلب (د.ب) *</Label>
@@ -235,7 +229,6 @@ export function OrderFormSimple({ onSubmit, onCancel, loading = false }: OrderFo
             </div>
           </div>
 
-          {/* Notes */}
           <div className="space-y-2">
             <Label htmlFor="notes">ملاحظات</Label>
             <Textarea
@@ -247,7 +240,6 @@ export function OrderFormSimple({ onSubmit, onCancel, loading = false }: OrderFo
             />
           </div>
 
-          {/* Buttons */}
           <div className="flex gap-2 pt-4">
             <Button 
               type="submit" 

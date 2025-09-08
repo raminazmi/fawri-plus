@@ -42,7 +42,7 @@ export interface Order {
   delivery: DeliveryDetails
   instructions: OrderInstructions
   isTransit: boolean
-  shipdayOrders: string[] // Array of Shipday order numbers
+  shipdayOrders: string[]
   assignedDriver?: {
     id: string
     name: string
@@ -143,8 +143,6 @@ export const createOrder = async (orderData: {
     const now = new Date()
     const pickupTime = now.toTimeString().split(" ")[0]
     const deliveryTime = new Date(now.getTime() + 15 * 60000).toTimeString().split(" ")[0]
-
-    // لو معندكش items من الواجهة – fallback item
     const orderItems = orderData.items?.length
       ? orderData.items
       : [{
@@ -156,27 +154,19 @@ export const createOrder = async (orderData: {
 const commonPayload = {
   orderNumber,
   externalId,
-
-  // Customer info
   customerName: orderData.delivery.name,
   customerPhone: orderData.delivery.phone,
   customerEmail: orderData.delivery.email || "",
   deliveryAddress: orderData.delivery.location,
   deliveryNote: orderData.instructions.instructions,
-
-  // Pickup info
   pickupName: orderData.pickup.name,
   pickupPhone: orderData.pickup.phone,
   pickupEmail: orderData.pickup.email || "",
   pickupAddress: orderData.pickup.location,
-
-  // Raw order data
   orderItems: orderData.items || [],
   totalPrice: orderData.cash,
   subTotal: orderData.items?.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0) || orderData.cash,
-
-  // Extra fields (عشان أي معلومة تتسجل زي ما هي)
-  rawData: orderData,   // ده يضمن إن أي حاجة إضافية متضيعش
+  rawData: orderData,
   deliveryDate: orderData.date,
   expectedPickupTime: pickupTime,
   expectedDeliveryTime: deliveryTime,
@@ -185,7 +175,6 @@ const commonPayload = {
 
 
     if (orderData.isTransit) {
-      // Hub Order
       const hubOrderPayload = {
         ...commonPayload,
         orderNumber: `${orderNumber}-H`,
@@ -198,8 +187,6 @@ const commonPayload = {
         subTotal: 0,
         orderItems: [{ name: "Hub Transfer", quantity: 1, unitPrice: 0 }]
       }
-
-      // Delivery Order
       const deliveryOrderPayload = {
         ...commonPayload,
         orderNumber: `${orderNumber}-D`,
@@ -209,12 +196,7 @@ const commonPayload = {
         pickupAddress: "Hub Location",
         deliveryAddress: orderData.delivery.location,
       }
-
-      // TODO: Implement Shipday order creation via API
-      console.log("Creating hub order:", hubOrderPayload)
-      console.log("Creating delivery order:", deliveryOrderPayload)
       
-      // Mock orders for now
       const hubOrder = { orderNumber: `${orderNumber}-H` }
       const deliveryOrder = { orderNumber: `${orderNumber}-D` }
 
@@ -226,17 +208,12 @@ const commonPayload = {
         deliveryAddress: orderData.delivery.location,
       }
 
-      // TODO: Implement Shipday order creation via API
-      console.log("Creating direct order:", directOrderPayload)
-      
-      // Mock order for now
       const shipdayOrder = { orderNumber: orderNumber }
       newOrder.shipdayOrders = [shipdayOrder.orderNumber]
     }
 
     newOrder.details.status = "assigned"
   } catch (error) {
-    console.error("Failed to create Shipday order:", error)
   }
 
   mockOrders.push(newOrder)
@@ -249,13 +226,6 @@ export const updateOrderStatus = async (orderId: string, status: OrderDetails["s
   if (orderIndex === -1) return null
 
   const order = mockOrders[orderIndex]
-
-  try {
-    // TODO: Implement Shipday order status update via API
-    console.log(`Updating Shipday orders ${order.shipdayOrders.join(', ')} status to ${status}`)
-  } catch (error) {
-    console.error("Failed to update Shipday order status:", error)
-  }
 
   mockOrders[orderIndex] = {
     ...order,
@@ -271,13 +241,8 @@ export const updateOrderStatus = async (orderId: string, status: OrderDetails["s
 
 export const syncWithShipday = async (): Promise<{ synced: number; errors: number }> => {
   try {
-    // TODO: Implement Shipday sync via API
-    console.log("Syncing with Shipday API...")
-    
-    // For now, return mock data
     return { synced: 0, errors: 0 }
   } catch (error) {
-    console.error("Failed to sync with Shipday:", error)
     return { synced: 0, errors: mockOrders.length }
   }
 }

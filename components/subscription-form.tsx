@@ -118,7 +118,6 @@ export function SubscriptionForm({
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Back Button */}
       <div className="mb-4">
         <Button
           variant="outline"
@@ -140,7 +139,6 @@ export function SubscriptionForm({
         </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Customer & Basic Info */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <Users className="h-4 w-4" />
@@ -188,8 +186,6 @@ export function SubscriptionForm({
           </div>
 
           <Separator />
-
-          {/* Billing Period */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <Calendar className="h-4 w-4" />
@@ -254,8 +250,6 @@ export function SubscriptionForm({
           </div>
 
           <Separator />
-
-          {/* Subscription Details */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
@@ -351,8 +345,6 @@ export function SubscriptionForm({
           </div>
 
           <Separator />
-
-          {/* Cross-type Handling */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -434,10 +426,7 @@ export function SubscriptionForm({
               )}
             </div>
           </div>
-
           <Separator />
-
-          {/* Unused Orders Policy */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">سياسة الطلبات غير المستخدمة</h3>
             <div className="space-y-4">

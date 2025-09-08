@@ -7,8 +7,6 @@ export async function PUT(
   try {
 
     const body = await request.json()
-
-    // Encode API key for Basic Auth
     const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
     const encodedApiKey = Buffer.from(apiKey + ':').toString('base64')
 
@@ -34,7 +32,6 @@ export async function PUT(
       )
     }
   } catch (error) {
-    console.error("[API] Request failed:", error)
     return NextResponse.json(
       { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }

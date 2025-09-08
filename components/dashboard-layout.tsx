@@ -48,7 +48,6 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
 
   const SidebarContent = () => (
     <div className="fixed flex flex-col h-full w-72 bg-gradient-to-b from-[#272626] to-[#272626]">
-      {/* Sidebar Header */}
       <div className="flex items-center justify-between p-6 border-b border-slate-700/50 flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
@@ -61,7 +60,6 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
         </div>
       </div>
 
-      {/* Navigation Links - Takes remaining space */}
       <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-2">
           {filteredNavItems.map((item) => {
@@ -89,7 +87,6 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
         </ul>
       </nav>
 
-      {/* User Profile - Always at the bottom */}
       <div className="flex-shrink-0 p-4 border-t border-slate-700/50">
         <div className="flex items-center gap-3 p-3 rounded-xl bg-[#ffcc04]/10 border border-[#ffcc04]/60">
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#ffcc04] to-[#ffcc04] flex items-center justify-center">
@@ -116,21 +113,17 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-[#ffcc04]/5 to-[ffcc04]/8">
-      {/* Desktop Sidebar */}
       <div className="hidden lg:flex lg:w-72 lg:flex-col">
         <SidebarContent />
       </div>
 
-      {/* Mobile Sidebar */}
       <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
         <SheetContent side="right" className="w-72 p-0">
           <SidebarContent />
         </SheetContent>
       </Sheet>
 
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
         <header className="fixed z-20 w-full lg:w-[calc(100%-285px)] bg-[#272626]/10 backdrop-blur-xl p-4 lg:py-4 lg:px-6 shadow-sm border-b border-gray-200/50 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Sheet>
@@ -176,7 +169,6 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
             </div>
           </div>
         </header>
-        {/* Page Content */}
         <main className="flex-1 overflow-auto p-4 lg:p-6 mt-20">{children}</main>
       </div>
     </div>

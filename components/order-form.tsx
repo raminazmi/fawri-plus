@@ -171,7 +171,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Back Button */}
       <div className="mb-4">
         <Button
           variant="outline"
@@ -194,7 +193,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
           
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Order Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">معلومات الطلب</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -237,7 +235,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
-              {/* Customer Selection */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">اختيار العميل</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -289,7 +286,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
-              {/* Customer Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">معلومات العميل</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -342,7 +338,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
-              {/* Restaurant Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">معلومات المطعم</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -376,7 +371,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
-              {/* Delivery Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">معلومات التوصيل</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -425,7 +419,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
-              {/* Location Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">معلومات الموقع</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -476,7 +469,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
-              {/* Financial Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">المعلومات المالية</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -534,7 +526,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
-              {/* Payment Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">معلومات الدفع</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -581,7 +572,6 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
-              {/* Buttons */}
               <div className="flex gap-2 pt-4">
                 <Button 
                   type="submit" 

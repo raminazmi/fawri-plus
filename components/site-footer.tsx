@@ -9,7 +9,6 @@ export default function SiteFooter() {
     <footer className="w-full border-t border-[#d2d2d2] bg-[#ececec] text-[#444647]">
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
         <div className="grid gap-6 md:grid-cols-12 items-start">
-          {/* Brand */}
           <div className="md:col-span-5 text-right">
             <div className="text-lg font-extrabold tracking-tight text-[#272626]">BLUE ALFA CONSULTANCY COMPANY</div>
             <div className="text-sm opacity-80 text-[#444647]">Fawri Plus Delivery</div>
@@ -18,7 +17,6 @@ export default function SiteFooter() {
             </p>
           </div>
 
-          {/* Links */}
           <div className="md:col-span-3 text-right">
             <h4 className="font-semibold mb-2 text-sm text-[#272626]">روابط سريعة</h4>
             <ul className="space-y-1 text-sm">
@@ -31,7 +29,6 @@ export default function SiteFooter() {
             </ul>
           </div>
 
-          {/* Contact */}
           <div className="md:col-span-4 text-right">
             <h4 className="font-semibold mb-2 text-sm text-[#272626]">التواصل</h4>
             <ul className="space-y-2 text-sm">

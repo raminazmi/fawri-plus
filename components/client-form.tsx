@@ -46,7 +46,6 @@ export function ClientForm({ client, onSubmit, onCancel, loading = false }: Clie
 
   return (
     <div className="max-w-2xl mx-auto">
-      {/* Back Button */}
       <div className="mb-4">
         <Button
           variant="outline"
@@ -70,7 +69,6 @@ export function ClientForm({ client, onSubmit, onCancel, loading = false }: Clie
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Client Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-gray-800">معلومات العميل</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -126,7 +124,6 @@ export function ClientForm({ client, onSubmit, onCancel, loading = false }: Clie
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-2 pt-4">
               <Button 
                 type="submit" 

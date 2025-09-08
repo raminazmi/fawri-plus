@@ -142,7 +142,6 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
       </DialogHeader>
       
       <div className="grid gap-6 -mt-2">
-        {/* Customer and Restaurant Info */}
         <div className="grid md:grid-cols-2 gap-6">
           <Card className="shadow-modern border-0 bg-gradient-to-br from-green-50 to-blue-50">
             <CardHeader className="bg-gradient-to-r from-green-100 to-green-200 rounded-t-lg">
@@ -200,7 +199,6 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
             </CardContent>
           </Card>
         </div>
-        {/* Order Details */}
         <Card className="shadow-modern border-0 bg-gradient-to-br from-blue-50 to-purple-50">
           <CardHeader className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-t-lg">
             <CardTitle className="text-lg flex items-center gap-2 text-blue-800">
@@ -295,7 +293,6 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
           </CardContent>
         </Card>
 
-        {/* Delivery Details */}
         <Card className="shadow-modern border-0 bg-gradient-to-br from-indigo-50 to-cyan-50">
           <CardHeader className="bg-gradient-to-r from-indigo-100 to-cyan-100 rounded-t-lg">
             <CardTitle className="text-lg flex items-center gap-2 text-indigo-800">
@@ -902,8 +899,6 @@ export function OrdersPage() {
         </Alert>
       )}
 
-
-      {/* Header */}
       <div className="bg-gradient-to-r from-[#ffcc04] to-[#ffcc04] rounded-2xl p-6 text-[#272626] shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -938,7 +933,6 @@ export function OrdersPage() {
         </div>
       </div>
 
-      {/* Search and Filter */}
       <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -969,7 +963,6 @@ export function OrdersPage() {
         </CardContent>
       </Card>
 
-      {/* Orders Table */}
       <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
         <CardHeader className="">
           <CardTitle className="flex items-center gap-2">
@@ -1027,7 +1020,6 @@ export function OrdersPage() {
                         ) : (
                           <span className="text-gray-500">غير معين</span>
                         )}
-                        {/* Driver assignment button */}
                         {getStatusOrder(order) === "pending" && (
                           <div className="mt-2">
                             <AssignDriverButton

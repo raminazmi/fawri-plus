@@ -8,11 +8,7 @@ export async function PUT(
     
     const orderId = params.id
     const body = await request.json()
-
-    // Use the correct API key
     const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
-
-    // Format the data for Shipday API
     const formattedData = {
       orderId: parseInt(orderId),
       orderNo: body.orderNumber || body.orderNo,
@@ -44,7 +40,6 @@ export async function PUT(
       creditCardId: body.creditCardId,
     }
 
-
     const response = await fetch(`https://api.shipday.com/order/edit/${orderId}`, {
       method: 'PUT',
       headers: {
@@ -67,7 +62,6 @@ export async function PUT(
       )
     }
   } catch (error) {
-    console.error("[API] Request failed:", error)
     return NextResponse.json(
       { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }

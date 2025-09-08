@@ -1,7 +1,5 @@
 "use client"
-
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -76,8 +74,6 @@ export function BillingPage() {
     endDate: new Date().toISOString().split("T")[0],
   })
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
-
-  // Form states
   const [showTransactionForm, setShowTransactionForm] = useState(false)
   const [showPaymentForm, setShowPaymentForm] = useState(false)
   const [showInvoiceForm, setShowInvoiceForm] = useState(false)
@@ -239,7 +235,6 @@ export function BillingPage() {
   if (showTransactionForm) {
     return (
       <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
         <div className="mb-4">
           <Button
             variant="outline"
@@ -341,7 +336,6 @@ export function BillingPage() {
   if (showPaymentForm) {
     return (
       <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
         <div className="mb-4">
           <Button
             variant="outline"
@@ -446,7 +440,6 @@ export function BillingPage() {
   if (showInvoiceForm) {
     return (
       <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
         <div className="mb-4">
           <Button
             variant="outline"
@@ -528,7 +521,6 @@ export function BillingPage() {
         </Alert>
       )}
 
-      {/* Header */}
       <div className="bg-gradient-to-r from-[#ffcc04] to-[#ffcc04] rounded-2xl p-6 text-[#272626] shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -561,7 +553,6 @@ export function BillingPage() {
         </div>
       </div>
 
-      {/* Filters */}
       <Card>
         <CardHeader>
           <CardTitle>التصفية والفترة الزمنية</CardTitle>

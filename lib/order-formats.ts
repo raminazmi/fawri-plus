@@ -1,6 +1,3 @@
-// Order data formats for Shipday API based on documentation
-// https://docs.shipday.com/reference/insert-delivery-order
-
 export interface OrderItem {
   name: string
   unitPrice: number
@@ -27,53 +24,36 @@ export interface DropoffLocation {
 }
 
 export interface CreateOrderRequest {
-  // Order information
   orderNumber: string
-  
-  // Customer information
   customerName: string
   customerPhone: string
   customerEmail?: string
   customerAddress: string
-  
-  // Restaurant/Pickup information
   restaurantName: string
   restaurantPhone: string
   restaurantAddress: string
-  
-  // Delivery timing
   expectedDeliveryDate: string
   expectedPickupTime?: string
   expectedDeliveryTime?: string
-  
-  // Location coordinates
   pickupLatitude?: number
   pickupLongitude?: number
   deliveryLatitude?: number
   deliveryLongitude?: number
-  
-  // Financial information
   tips?: number
   tax?: number
   discountAmount?: number
   deliveryFee?: number
   totalOrderCost: number
-  
-  // Additional information
   deliveryInstruction?: string
   orderSource?: string
   additionalId?: string
   clientRestaurantId?: number
-  
-  // Payment information
   paymentMethod: 'cash' | 'credit_card'
   creditCardType?: 'visa' | 'master_card' | 'AMEX' | 'other'
   creditCardId?: number
 }
 
-// Helper function to format order data for Shipday API
 export function formatOrderForShipday(orderData: CreateOrderRequest) {
-  // Ensure all required fields have default values
   const safeOrderData = {
     orderNumber: orderData.orderNumber || `ORD-${Date.now()}`,
     customerName: orderData.customerName || '',
@@ -135,7 +115,6 @@ export function formatOrderForShipday(orderData: CreateOrderRequest) {
   }
 }
 
-// Helper function to create an order with the exact format you provided
 export function createOrderWithProvidedData(): CreateOrderRequest {
   return {
     orderNumber: "99qT5A",

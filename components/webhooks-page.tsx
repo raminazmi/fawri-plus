@@ -136,7 +136,6 @@ export function WebhooksPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl p-6 text-white shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -155,7 +154,6 @@ export function WebhooksPage() {
         </div>
       </div>
 
-      {/* Add Webhook Button */}
       <div className="flex justify-end">
         <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
           <DialogTrigger asChild>
@@ -204,7 +202,6 @@ export function WebhooksPage() {
         </Dialog>
       </div>
 
-      {/* Webhooks List */}
       {webhooks.length === 0 ? (
         <Alert>
           <AlertCircle className="h-4 w-4" />
@@ -274,7 +271,6 @@ export function WebhooksPage() {
         </div>
       )}
 
-      {/* Information Card */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

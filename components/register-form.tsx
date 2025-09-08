@@ -79,7 +79,6 @@ export function RegisterForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -87,7 +86,6 @@ export function RegisterForm() {
       </div>
 
       <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
-        {/* Left Side - Branding */}
         <div className="hidden lg:block space-y-8 animate-slide-in">
           <div className="space-y-4">
             <div className="flex items-center space-x-3 space-x-reverse">
@@ -117,8 +115,6 @@ export function RegisterForm() {
             </div>
           </div>
         </div>
-
-        {/* Right Side - Register Form */}
         <div className="w-full max-w-md mx-auto animate-scale-in">
           <Card className="glass-dark border-0 shadow-modern-xl">
             <CardHeader className="space-y-1 text-center pb-8">

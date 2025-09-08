@@ -16,7 +16,6 @@ import { UserData } from "@/lib/users"
 import { addUser, updateUser, deleteUser, getUsers } from "@/lib/users"
 import { cn } from "@/lib/utils"
 
-// تم نقل مكون UserForm إلى خارج المكون الرئيسي
 const UserForm = ({ formData, setFormData, handleSubmit, loading, selectedUser, error, onCancel }: {
   formData: any;
   setFormData: (data: any) => void;
@@ -27,7 +26,6 @@ const UserForm = ({ formData, setFormData, handleSubmit, loading, selectedUser, 
   onCancel: () => void;
 }) => (
   <div className="max-w-md mx-auto">
-    {/* Back Button */}
     <div className="mb-4">
       <Button
         variant="outline"
@@ -132,7 +130,6 @@ export function UsersPage() {
   const [userToDelete, setUserToDelete] = useState<string | null>(null)
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null)
 
-  // Form state
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -163,13 +160,11 @@ export function UsersPage() {
 
     try {
       if (selectedUser) {
-        // For updates, only include password if it's provided
         const updateData = formData.password 
           ? formData 
           : { username: formData.username, email: formData.email, role: formData.role }
         await updateUser(selectedUser.id, updateData)
       } else {
-        // For new users, password is required
         if (!formData.password) {
           setError("كلمة المرور مطلوبة للمستخدمين الجدد")
           return
@@ -334,7 +329,6 @@ export function UsersPage() {
         </CardContent>
       </Card>
 
-      {/* نافذة تعديل المستخدم */}
       <Dialog open={isEditUserDialogOpen} onOpenChange={setIsEditUserDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -360,7 +354,6 @@ export function UsersPage() {
         </DialogContent>
       </Dialog>
 
-      {/* نافذة تأكيد الحذف */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

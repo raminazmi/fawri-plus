@@ -1,5 +1,4 @@
 "use client"
-
 import React from "react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
@@ -7,21 +6,13 @@ import Image from "next/image"
 import Link from "next/link"
 import { useAuth } from "@/hooks/use-auth"
 import Loading from "@/components/loading"
-
-// Components
 import { LoginForm } from "@/components/login-form"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-
-// Icons
 import { Package, Truck, Users, CreditCard, AlertCircle, Settings, MapPin, Phone, Building2, TrendingUp, TrendingDown } from "lucide-react"
-
-// API Functions
 import { fetchOrders, fetchDrivers } from "@/lib/shipday-api-functions"
-
-// Image
 import hero2 from "../public/images/hero-image.svg"
 
 function DashboardOverview() {
@@ -46,7 +37,6 @@ function DashboardOverview() {
     cancelled: "ملغي",
   }
 
-  // Define the new color palette
   const colors = {
     yellow: "#ffcc04",
     black: "#272626",
@@ -60,7 +50,6 @@ function DashboardOverview() {
   useEffect(() => {
     async function loadDashboardData() {
       try {
-        console.log("[v0] Loading dashboard data from Shipday API")
         setError(null)
         const [ordersData, driversData] = await Promise.all([fetchOrders(), fetchDrivers()])
 
@@ -71,16 +60,13 @@ function DashboardOverview() {
         setStats({
           totalOrders,
           activeDrivers,
-          subscribers: 89, // This would come from subscription system
+          subscribers: 89,
           revenue,
         })
 
         setRecentOrders(ordersData.slice(0, 5))
         setDrivers(driversData.slice(0, 4))
-
-        console.log("[v0] Dashboard data loaded successfully")
       } catch (error: any) {
-        console.error("[v0] Error loading dashboard data:", error)
         setError(error.message)
       } finally {
         setLoading(false)
@@ -161,7 +147,6 @@ function DashboardOverview() {
 
   return (
     <div className="space-y-6">
-      {/* Overview Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -208,7 +193,6 @@ function DashboardOverview() {
         </Card>
       </div>
 
-      {/* Recent Orders & Driver Status */}
       <div className="grid gap-4 md:grid-cols-2">
         <Card className={`shadow-xl`}>
           <CardHeader>
@@ -263,7 +247,6 @@ function DashboardOverview() {
         </Card>
       </div>
 
-      {/* Services / Features */}
       <section className="grid gap-4 md:grid-cols-3">
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -299,9 +282,7 @@ function DashboardOverview() {
 
 export default function HomePage() {
   const { isAuthenticated, loading } = useAuth()
-  
-  // Define the new color palette outside of the component to be available
-  const colors = {
+    const colors = {
     yellow: "#ffcc04",
     black: "#272626",
     white: "#ececec",
