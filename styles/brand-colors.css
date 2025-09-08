@@ -1,0 +1,62 @@
+/* Brand Colors */
+:root {
+  --brand-yellow: #ffcc04;
+  --brand-black: #272626;
+  --brand-white: #ececec;
+  --brand-grey-light: #d2d2d2;
+  --brand-grey-dark: #444647;
+  --brand-blue-light: #59c5c7;
+  --brand-blue-dark: #574b9f;
+}
+
+/* Gradient Backgrounds */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, var(--brand-yellow) 0%, var(--brand-blue-dark) 100%);
+}
+
+.bg-brand-gradient-horizontal {
+  background: linear-gradient(90deg, var(--brand-yellow) 0%, var(--brand-blue-dark) 100%);
+}
+
+.bg-brand-gradient-light {
+  background: linear-gradient(135deg, var(--brand-white) 0%, var(--brand-grey-light) 100%);
+}
+
+/* Brand Colors */
+.text-brand-yellow { color: var(--brand-yellow); }
+.text-brand-black { color: var(--brand-black); }
+.text-brand-white { color: var(--brand-white); }
+.text-brand-grey-light { color: var(--brand-grey-light); }
+.text-brand-grey-dark { color: var(--brand-grey-dark); }
+.text-brand-blue-light { color: var(--brand-blue-light); }
+.text-brand-blue-dark { color: var(--brand-blue-dark); }
+
+.bg-brand-yellow { background-color: var(--brand-yellow); }
+.bg-brand-black { background-color: var(--brand-black); }
+.bg-brand-white { background-color: var(--brand-white); }
+.bg-brand-grey-light { background-color: var(--brand-grey-light); }
+.bg-brand-grey-dark { background-color: var(--brand-grey-dark); }
+.bg-brand-blue-light { background-color: var(--brand-blue-light); }
+.bg-brand-blue-dark { background-color: var(--brand-blue-dark); }
+
+.border-brand-yellow { border-color: var(--brand-yellow); }
+.border-brand-black { border-color: var(--brand-black); }
+.border-brand-white { border-color: var(--brand-white); }
+.border-brand-grey-light { border-color: var(--brand-grey-light); }
+.border-brand-grey-dark { border-color: var(--brand-grey-dark); }
+.border-brand-blue-light { border-color: var(--brand-blue-light); }
+.border-brand-blue-dark { border-color: var(--brand-blue-dark); }
+
+/* Focus States */
+.focus-brand-blue-light:focus {
+  --tw-ring-color: var(--brand-blue-light);
+}
+
+/* Shadow with Brand Colors */
+.shadow-brand-yellow {
+  box-shadow: 0 10px 25px rgba(255, 204, 4, 0.25);
+}
+
+.shadow-brand-blue-dark {
+  box-shadow: 0 10px 25px rgba(87, 75, 159, 0.25);
+}

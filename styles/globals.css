@@ -1,0 +1,179 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated Palette */
+  --brand-white: #ffffff; /* Changed to pure white for better contrast */
+  --brand-grey-light: #f0f0f0; /* Lighter grey for better visibility */
+  --brand-grey-dark: #333333; /* Darker grey for text */
+  --brand-blue-light: #4db6e1; /* Lighter blue for accents */
+  --brand-blue-dark: #003d66; /* Darker blue for primary actions */
+
+  /* Base */
+  --background: var(--brand-white);
+  --foreground: var(--brand-grey-dark);
+
+  /* Surfaces */
+  --card: var(--brand-white);
+  --card-foreground: var(--brand-grey-dark);
+  --popover: var(--brand-white);
+  --popover-foreground: var(--brand-grey-dark);
+
+  /* Accent/Actions */
+  --primary: var(--brand-blue-dark);
+  --primary-foreground: var(--brand-white);
+  --secondary: var(--brand-blue-light);
+  --secondary-foreground: var(--brand-grey-dark);
+  --accent: var(--brand-blue-light);
+  --accent-foreground: var(--brand-grey-dark);
+  --muted: var(--brand-grey-light);
+  --muted-foreground: var(--brand-grey-dark);
+  --destructive: var(--brand-blue-dark); /* constrained to palette */
+  --destructive-foreground: var(--brand-white);
+
+  /* Controls */
+  --border: var(--brand-grey-light);
+  --input: var(--brand-grey-light);
+  --ring: var(--brand-blue-light);
+
+  /* Charts (constrained to palette) */
+  --chart-1: var(--brand-blue-dark);
+  --chart-2: var(--brand-blue-light);
+  --chart-3: var(--brand-grey-dark);
+  --chart-4: var(--brand-grey-light);
+  --chart-5: var(--brand-white);
+
+  --radius: 0.625rem;
+
+  /* Sidebar */
+  --sidebar: var(--brand-white);
+  --sidebar-foreground: var(--brand-grey-dark);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--brand-grey-light);
+  --sidebar-accent-foreground: var(--brand-grey-dark);
+  --sidebar-border: var(--brand-grey-light);
+  --sidebar-ring: var(--ring);
+}
+
+.dark {
+  --background: #333333; /* Use the new dark grey for background */
+  --foreground: #ffffff; /* Use pure white for text */
+  --card: #333333; /* Use the new dark grey for cards */
+  --card-foreground: #ffffff; /* Use pure white for card text */
+  --popover: #333333; /* Use the new dark grey for popovers */
+  --popover-foreground: #ffffff; /* Use pure white for popover text */
+  --primary: #4db6e1; /* Use the new light blue for primary actions */
+  --primary-foreground: #ffffff; /* Use pure white for primary text */
+  --secondary: #003d66; /* Use the new dark blue for secondary actions */
+  --secondary-foreground: #ffffff; /* Use pure white for secondary text */
+  --muted: #f0f0f0; /* Use the new light grey for muted elements */
+  --muted-foreground: #ffffff; /* Use pure white for muted text */
+  --accent: #003d66; /* Use the new dark blue for accents */
+  --accent-foreground: #ffffff; /* Use pure white for accent text */
+  --destructive: #003d66; /* Use the new dark blue for destructive actions */
+  --destructive-foreground: #ffffff; /* Use pure white for destructive text */
+  --border: #f0f0f0; /* Use the new light grey for borders */
+  --input: #f0f0f0; /* Use the new light grey for inputs */
+  --ring: #4db6e1; /* Use the new light blue for rings */
+  --chart-1: #003d66; /* Use the new dark blue for chart 1 */
+  --chart-2: #4db6e1; /* Use the new light blue for chart 2 */
+  --chart-3: #f0f0f0; /* Use the new light grey for chart 3 */
+  --chart-4: #ffffff; /* Use pure white for chart 4 */
+  --chart-5: #333333; /* Use the new dark grey for chart 5 */
+  --sidebar: #333333; /* Use the new dark grey for sidebar */
+  --sidebar-foreground: #ffffff; /* Use pure white for sidebar text */
+  --sidebar-primary: #4db6e1; /* Use the new light blue for sidebar primary */
+  --sidebar-primary-foreground: #ffffff; /* Use pure white for sidebar primary text */
+  --sidebar-accent: #f0f0f0; /* Use the new light grey for sidebar accent */
+  --sidebar-accent-foreground: #333333; /* Use the new dark grey for sidebar accent text */
+  --sidebar-border: #f0f0f0; /* Use the new light grey for sidebar borders */
+  --sidebar-ring: #4db6e1; /* Use the new light blue for sidebar rings */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    transition: background-color, border-color, color, fill, stroke 0.2s ease-in-out;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Animation utilities */
+.animate-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-out {
+  animation: fadeOut 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(10px); }
+}
+
+.hover-scale {
+  transition: transform 0.2s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
