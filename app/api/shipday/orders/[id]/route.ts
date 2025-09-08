@@ -5,12 +5,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    console.log("[API] Updating order in Shipday...")
     
     const orderId = params.id
     const body = await request.json()
-    console.log("[API] Request body:", body)
-    console.log("[API] Order ID:", orderId)
 
     // Use the correct API key
     const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
@@ -47,7 +44,6 @@ export async function PUT(
       creditCardId: body.creditCardId,
     }
 
-    console.log("[API] Formatted data for Shipday:", formattedData)
 
     const response = await fetch(`https://api.shipday.com/order/edit/${orderId}`, {
       method: 'PUT',
@@ -59,16 +55,12 @@ export async function PUT(
       body: JSON.stringify(formattedData),
     })
 
-    console.log("[API] Shipday response status:", response.status)
-    console.log("[API] Response headers:", Object.fromEntries(response.headers.entries()))
 
     if (response.ok) {
       const data = await response.json()
-      console.log("[API] Success! Updated order:", data)
       return NextResponse.json(data)
     } else {
       const errorText = await response.text()
-      console.log("[API] Error response:", errorText)
       return NextResponse.json(
         { error: `Shipday API Error: ${response.status} ${response.statusText}`, details: errorText },
         { status: response.status }

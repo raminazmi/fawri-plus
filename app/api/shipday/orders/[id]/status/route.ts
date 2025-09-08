@@ -5,10 +5,8 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    console.log("[API] Updating order status:", params.id)
 
     const body = await request.json()
-    console.log("[API] Request body:", body)
 
     // Encode API key for Basic Auth
     const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
@@ -24,15 +22,12 @@ export async function PUT(
       body: JSON.stringify(body),
     })
 
-    console.log("[API] Shipday response status:", response.status)
 
     if (response.ok) {
       const data = await response.json()
-      console.log("[API] Success! Updated order status:", data)
       return NextResponse.json(data)
     } else {
       const errorText = await response.text()
-      console.log("[API] Error response:", errorText)
       return NextResponse.json(
         { error: `Shipday API Error: ${response.status} ${response.statusText}`, details: errorText },
         { status: response.status }

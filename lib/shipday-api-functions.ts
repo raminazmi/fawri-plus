@@ -16,9 +16,7 @@ const UI_TO_API_STATUS: Record<string, string> = {
 // API Functions using direct fetch calls
 export async function fetchOrders(): Promise<ShipdayOrder[]> {
   try {
-    console.log('[API Functions] Fetching orders from /api/shipday/orders')
     const response = await fetch('/api/shipday/orders')
-    console.log('[API Functions] Response status:', response.status)
     
     if (!response.ok) {
       const errorText = await response.text()
@@ -27,8 +25,6 @@ export async function fetchOrders(): Promise<ShipdayOrder[]> {
     }
     
     const data = await response.json()
-    console.log('[API Functions] Received data:', typeof data, Array.isArray(data) ? data.length : 'Not array')
-    console.log('[API Functions] Data sample:', Array.isArray(data) ? data.slice(0, 1) : data)
     
     return Array.isArray(data) ? data : []
   } catch (error) {
@@ -39,9 +35,7 @@ export async function fetchOrders(): Promise<ShipdayOrder[]> {
 
 export async function fetchDrivers(): Promise<ShipdayDriver[]> {
   try {
-    console.log('[API Functions] Fetching drivers from /api/shipday/carriers')
     const response = await fetch('/api/shipday/carriers')
-    console.log('[API Functions] Drivers response status:', response.status)
     
     if (!response.ok) {
       const errorText = await response.text()
@@ -50,8 +44,6 @@ export async function fetchDrivers(): Promise<ShipdayDriver[]> {
     }
     
     const data = await response.json()
-    console.log('[API Functions] Received drivers data:', typeof data, Array.isArray(data) ? data.length : 'Not array')
-    console.log('[API Functions] Drivers data sample:', Array.isArray(data) ? data.slice(0, 1) : data)
     
     return Array.isArray(data) ? data : []
   } catch (error) {
@@ -62,7 +54,6 @@ export async function fetchDrivers(): Promise<ShipdayDriver[]> {
 
 export async function updateOrderStatus(orderId: number, status: NormalizedStatus): Promise<boolean> {
   try {
-    console.log(`Updating order ${orderId} status to ${status}`)
     
     // Convert normalized status to Shipday API status
     const apiStatus = UI_TO_API_STATUS[status] || status.toUpperCase()
@@ -80,7 +71,6 @@ export async function updateOrderStatus(orderId: number, status: NormalizedStatu
       throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
     }
 
-    console.log(`Successfully updated order ${orderId} status to ${status}`)
     return true
   } catch (error) {
     console.error(`Failed to update order ${orderId} status:`, error)
@@ -90,7 +80,6 @@ export async function updateOrderStatus(orderId: number, status: NormalizedStatu
 
 export async function assignOrderToDriver(orderId: number, driverId: number): Promise<boolean> {
   try {
-    console.log(`Assigning order ${orderId} to driver ${driverId}`)
     
     const response = await fetch(`/api/shipday/orders/${orderId}/assign`, {
       method: 'PUT',
@@ -105,7 +94,6 @@ export async function assignOrderToDriver(orderId: number, driverId: number): Pr
       throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
     }
 
-    console.log(`Successfully assigned order ${orderId} to driver ${driverId}`)
     return true
   } catch (error) {
     console.error(`Failed to assign order ${orderId} to driver ${driverId}:`, error)
@@ -115,7 +103,6 @@ export async function assignOrderToDriver(orderId: number, driverId: number): Pr
 
 export async function addDriver(driverData: Partial<ShipdayDriver>): Promise<ShipdayDriver> {
   try {
-    console.log('Adding driver:', driverData)
     
     const response = await fetch('/api/shipday/carriers', {
       method: 'POST',

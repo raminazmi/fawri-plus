@@ -529,7 +529,6 @@ function AssignDriverButton({ order, drivers, onAssign }: {
             </Label>
             <Select
               onValueChange={(value) => {
-                console.log("Selected driver id:", value);
                 setSelectedDriverId(Number(value));
               }}
               value={selectedDriverId ? String(selectedDriverId) : undefined}
@@ -631,7 +630,6 @@ export function OrdersPage() {
       
       setOrders(ordersData)
       setDrivers(driversData)
-      console.log("[v0] Loaded", ordersData.length, "orders and", driversData.length, "drivers")
     } catch (error) {
       console.error("[v0] Error loading data:", error)
       setMessage({ type: "error", text: "فشل في تحميل البيانات من Shipday API" })
@@ -701,7 +699,6 @@ export function OrdersPage() {
 
   const handleNewOrder = async (orderData: any) => {
     try {
-      console.log("[v0] Creating new order with data:", orderData);
 
       setLoading(true);
       setMessage(null);
@@ -715,11 +712,9 @@ export function OrdersPage() {
         body: JSON.stringify(orderData),
       });
 
-      console.log("[v0] API response status:", response.status);
 
       if (response.ok) {
         const result = await response.json();
-        console.log("[v0] Order creation result:", result);
         
         setMessage({
           type: "success",
@@ -775,8 +770,6 @@ export function OrdersPage() {
 
   const handleUpdateOrder = async (orderId: string, orderData: any) => {
     try {
-      console.log("[v0] Updating order with data:", orderData);
-      console.log("[v0] Order ID:", orderId);
 
       setLoading(true);
       setMessage(null);
@@ -790,11 +783,9 @@ export function OrdersPage() {
         body: JSON.stringify(orderData),
       });
 
-      console.log("[v0] API response status:", response.status);
 
       if (response.ok) {
         const result = await response.json();
-        console.log("[v0] Order update result:", result);
         
         setMessage({
           type: "success",
