@@ -92,7 +92,7 @@ export const deleteUserFromAuth = (username: string, email: string) => {
 
 export const authenticate = async (email: string, password: string): Promise<{user: User, token: string} | null> => {
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/auth/login", {
+    const response = await fetch("https://backend.fawri-plus.com/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
