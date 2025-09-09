@@ -64,6 +64,7 @@ const invoiceStatusColors = {
 
 export function BillingPage() {
   const { t } = useTranslation()
+  const invoiceStatusLabels = getInvoiceStatusLabels(t)
   const [customers, setCustomers] = useState<Customer[]>([])
   const [transactions, setTransactions] = useState<BillingTransaction[]>([])
   const [payments, setPayments] = useState<Payment[]>([])
@@ -696,7 +697,7 @@ export function BillingPage() {
                       </CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={invoiceStatusColors[invoice.status]}>{invoiceStatusLabels[invoice.status]}</Badge>
+                      <Badge variant={invoiceStatusColors[invoice.status]}>{getInvoiceStatusLabels(t)[invoice.status]}</Badge>
                       <Select
                         value={invoice.status}
                         onValueChange={(value: Invoice["status"]) => handleUpdateInvoiceStatus(invoice.id, value)}
