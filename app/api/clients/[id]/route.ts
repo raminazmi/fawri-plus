@@ -18,6 +18,7 @@ export async function PUT(
         ...(authHeader && { "Authorization": authHeader }),
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(10000),
     })
 
     if (!response.ok) {
@@ -81,6 +82,7 @@ export async function DELETE(
         "Content-Type": "application/json",
         ...(authHeader && { "Authorization": authHeader }),
       },
+      signal: AbortSignal.timeout(10000), // 10 second timeout
     })
 
     if (!response.ok) {

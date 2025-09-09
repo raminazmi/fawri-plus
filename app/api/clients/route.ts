@@ -76,6 +76,7 @@ export async function POST(request: NextRequest) {
         ...(authHeader && { "Authorization": authHeader }),
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(10000), // 10 second timeout
     })
 
     if (!response.ok) {
