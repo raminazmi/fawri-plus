@@ -381,7 +381,7 @@ export const getBillingSummaries = async (): Promise<BillingSummary[]> => {
   await new Promise((resolve) => setTimeout(resolve, 800))
 
   const summaries: BillingSummary[] = []
-  const customers = [...new Set(mockTransactions.map((t) => ({ id: t.customerId, name: t.customerName })))]
+  const customers = Array.from(new Set(mockTransactions.map((t) => ({ id: t.customerId, name: t.customerName }))))
 
   for (const customer of customers) {
     const customerInvoices = mockInvoices.filter((i) => i.customerId === customer.id)
