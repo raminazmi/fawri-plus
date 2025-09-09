@@ -62,3 +62,66 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
+
+    const response = await fetch('https://api.shipday.com/orders', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${apiKey}`,
+      },
+      body: JSON.stringify(body),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return NextResponse.json(data)
+    } else {
+      const errorText = await response.text()
+      return NextResponse.json(
+        { error: `Shipday API Error: ${response.status} ${response.statusText}`, details: errorText },
+        { status: response.status }
+      )
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
+
+    const response = await fetch('https://api.shipday.com/orders', {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Basic ${apiKey}`,
+      },
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return NextResponse.json(data)
+    } else {
+      const errorText = await response.text()
+      return NextResponse.json(
+        { error: `Shipday API Error: ${response.status} ${response.statusText}`, details: errorText },
+        { status: response.status }
+      )
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
+    )
+  }
+}
