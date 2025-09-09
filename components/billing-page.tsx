@@ -65,6 +65,8 @@ const invoiceStatusColors = {
 export function BillingPage() {
   const { t } = useTranslation()
   const invoiceStatusLabels = getInvoiceStatusLabels(t)
+  const transactionTypeLabels = getTransactionTypeLabels(t)
+  const paymentMethodLabels = getPaymentMethodLabels(t)
   const [customers, setCustomers] = useState<Customer[]>([])
   const [transactions, setTransactions] = useState<BillingTransaction[]>([])
   const [payments, setPayments] = useState<Payment[]>([])
