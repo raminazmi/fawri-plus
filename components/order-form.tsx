@@ -18,6 +18,16 @@ interface OrderFormProps {
   onSubmit: (orderData: ShipdayOrderData) => Promise<void>
   onCancel: () => void
   loading?: boolean
+  initialData?: any
+  isEdit?: boolean
+}
+
+interface OrderItem {
+  name: string
+  unitPrice: number
+  quantity: number
+  addOns?: string[]
+  detail?: string
 }
 
 interface ShipdayOrderData {
@@ -48,16 +58,116 @@ interface ShipdayOrderData {
   paymentMethod: string
   creditCardType?: string
   creditCardId?: number
+  orderItems?: OrderItem[]
 }
 
-export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProps) {
+export function OrderForm({ onSubmit, onCancel, loading = false, initialData, isEdit = false }: OrderFormProps) {
   const [clients, setClients] = useState<Client[]>([])
   const [selectedClient, setSelectedClient] = useState<Client | null>(null)
   const [loadingClients, setLoadingClients] = useState(false)
   const [showAddClientDialog, setShowAddClientDialog] = useState(false)
   const [addingClient, setAddingClient] = useState(false)
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([])
+
+  // تهيئة orderItems عند التعديل
+  useEffect(() => {
+    if (isEdit && initialData && initialData.orderItems) {
+      setOrderItems(initialData.orderItems)
+    }
+  }, [isEdit, initialData])
+
+  const addOrderItem = () => {
+    setOrderItems([...orderItems, { name: '', unitPrice: 0, quantity: 1, addOns: [], detail: '' }])
+  }
+
+  const removeOrderItem = (index: number) => {
+    setOrderItems(orderItems.filter((_, i) => i !== index))
+  }
+
+  const updateOrderItem = (index: number, field: keyof OrderItem, value: any) => {
+    const updatedItems = [...orderItems]
+    updatedItems[index] = { ...updatedItems[index], [field]: value }
+    setOrderItems(updatedItems)
+  }
   
-  const [formData, setFormData] = useState<ShipdayOrderData>({
+  const [formData, setFormData] = useState<ShipdayOrderData>(() => {
+    if (isEdit && initialData) {
+      // تحويل البيانات من Shipday إلى تنسيق النموذج
+      return {
+        orderNumber: initialData.orderNumber || "",
+        customerName: initialData.customer?.name || "",
+        customerAddress: initialData.customer?.address || "",
+        customerEmail: initialData.customer?.email || "",
+        customerPhoneNumber: initialData.customer?.phoneNumber || "",
+        restaurantName: initialData.restaurant?.name || "",
+        restaurantAddress: initialData.restaurant?.address || "",
+        restaurantPhoneNumber: initialData.restaurant?.phoneNumber || "",
+        expectedDeliveryDate: (() => {
+          try {
+            if (initialData.activityLog?.expectedDeliveryTime) {
+              const date = new Date(initialData.activityLog.expectedDeliveryTime);
+              if (!isNaN(date.getTime())) {
+                return date.toISOString().split("T")[0];
+              }
+            }
+          } catch (error) {
+            console.warn("Invalid delivery date:", error);
+          }
+          return new Date().toISOString().split("T")[0];
+        })(),
+        expectedPickupTime: (() => {
+          try {
+            if (initialData.activityLog?.expectedPickupTime) {
+              const timeStr = initialData.activityLog.expectedPickupTime;
+              // Handle different time formats
+              if (timeStr.includes(" ")) {
+                return timeStr.split(" ")[1]?.substring(0, 5) || "17:45";
+              } else if (timeStr.includes(":")) {
+                return timeStr.substring(0, 5);
+              }
+            }
+          } catch (error) {
+            console.warn("Invalid pickup time:", error);
+          }
+          return "17:45";
+        })(),
+        expectedDeliveryTime: (() => {
+          try {
+            if (initialData.activityLog?.expectedDeliveryTime) {
+              const timeStr = initialData.activityLog.expectedDeliveryTime;
+              // Handle different time formats
+              if (timeStr.includes(" ")) {
+                return timeStr.split(" ")[1]?.substring(0, 5) || "19:22";
+              } else if (timeStr.includes(":")) {
+                return timeStr.substring(0, 5);
+              }
+            }
+          } catch (error) {
+            console.warn("Invalid delivery time:", error);
+          }
+          return "19:22";
+        })(),
+        pickupLatitude: initialData.pickupLatitude || 41.53867,
+        pickupLongitude: initialData.pickupLongitude || -72.0827,
+        deliveryLatitude: initialData.deliveryLatitude || 41.53867,
+        deliveryLongitude: initialData.deliveryLongitude || -72.0827,
+        tips: initialData.costing?.tip || 0,
+        tax: initialData.costing?.tax || 0,
+        discountAmount: initialData.costing?.discountAmount || 0,
+        deliveryFee: initialData.costing?.deliveryFee || 0,
+        totalOrderCost: initialData.costing?.totalCost || 0,
+        deliveryInstruction: initialData.deliveryInstruction || "",
+        orderSource: initialData.orderSource || "Fawri Plus",
+        additionalId: initialData.additionalId || "",
+        clientRestaurantId: initialData.clientRestaurantId || 1,
+        paymentMethod: initialData.paymentMethod || "cash",
+        creditCardType: initialData.creditCardType || "",
+        creditCardId: initialData.creditCardId || 0,
+      }
+    }
+    
+    // البيانات الافتراضية للطلب الجديد
+    return {
     orderNumber: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
     customerName: "",
     customerAddress: "",
@@ -85,6 +195,7 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
     paymentMethod: "cash",
     creditCardType: "",
     creditCardId: 0,
+    }
   })
 
   // Load clients on component mount
@@ -113,7 +224,7 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
         customerName: client.name,
         customerEmail: client.email,
         customerPhoneNumber: client.phone,
-        customerAddress: client.address || prev.customerAddress, // Include address if available
+        customerAddress: prev.customerAddress, // Keep existing address
       }))
     }
   }
@@ -151,7 +262,13 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
       return
     }
     
-    await onSubmit(formData)
+    // إضافة orderItems إلى البيانات المرسلة
+    const orderDataWithItems = {
+      ...formData,
+      orderItems: orderItems.filter(item => item.name.trim() !== '') // إزالة العناصر الفارغة
+    }
+    
+    await onSubmit(orderDataWithItems)
   }
 
   const handleInputChange = (field: keyof ShipdayOrderData, value: string | number) => {
@@ -186,9 +303,11 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Package className="h-5 w-5" />
-            إنشاء طلب جديد - Shipday
+            {isEdit ? "تعديل الطلب" : "إنشاء طلب جديد"} - Shipday
           </CardTitle>
-          <CardDescription>أدخل جميع البيانات المطلوبة لإنشاء طلب في Shipday</CardDescription>
+          <CardDescription>
+            {isEdit ? "قم بتعديل البيانات المطلوبة للطلب" : "أدخل جميع البيانات المطلوبة لإنشاء طلب في Shipday"}
+          </CardDescription>
         </CardHeader>
           
         <CardContent>
@@ -419,6 +538,100 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                 </div>
               </div>
 
+              {/* قسم تفاصيل الطلب */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-800">تفاصيل الطلب</h3>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addOrderItem}
+                    className="flex items-center gap-2"
+                  >
+                    <Plus className="h-4 w-4" />
+                    إضافة عنصر
+                  </Button>
+                </div>
+                
+                {orderItems.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <p>لا توجد عناصر في الطلب</p>
+                    <p className="text-sm">اضغط على "إضافة عنصر" لإضافة عناصر للطلب</p>
+                  </div>
+                )}
+
+                {orderItems.map((item, index) => (
+                  <div key={index} className="border rounded-lg p-4 space-y-4 bg-gray-50">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-gray-700">العنصر #{index + 1}</h4>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeOrderItem(index)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        حذف
+                      </Button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label>اسم العنصر</Label>
+                        <Input
+                          value={item.name}
+                          onChange={(e) => updateOrderItem(index, 'name', e.target.value)}
+                          placeholder="مثال: برجر دجاج"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>السعر</Label>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          value={item.unitPrice}
+                          onChange={(e) => updateOrderItem(index, 'unitPrice', parseFloat(e.target.value) || 0)}
+                          placeholder="0.00"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>الكمية</Label>
+                        <Input
+                          type="number"
+                          min="1"
+                          value={item.quantity}
+                          onChange={(e) => updateOrderItem(index, 'quantity', parseInt(e.target.value) || 1)}
+                          placeholder="1"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>الإضافات</Label>
+                        <Textarea
+                          value={item.addOns?.join(', ') || ''}
+                          onChange={(e) => updateOrderItem(index, 'addOns', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
+                          placeholder="استخدم الفاصلة للفصل بين الإضافات"
+                          rows={2}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>تعليمات خاصة</Label>
+                        <Textarea
+                          value={item.detail || ''}
+                          onChange={(e) => updateOrderItem(index, 'detail', e.target.value)}
+                          placeholder="تعليمات خاصة لهذا العنصر"
+                          rows={2}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">معلومات الموقع</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -583,7 +796,7 @@ export function OrderForm({ onSubmit, onCancel, loading = false }: OrderFormProp
                       جاري الحفظ...
                     </>
                   ) : (
-                    "إضافة الطلب"
+                    isEdit ? "تحديث الطلب" : "إضافة الطلب"
                   )}
                 </Button>
                 <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>

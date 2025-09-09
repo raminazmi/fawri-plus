@@ -66,22 +66,80 @@ export async function updateOrderStatus(orderId: number, status: NormalizedStatu
 
 export async function assignOrderToDriver(orderId: number, driverId: number): Promise<boolean> {
   try {
+    console.log('assignOrderToDriver called with:', { orderId, driverId });
     
     const response = await fetch(`/api/shipday/orders/${orderId}/assign`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ driverId }),
+      body: JSON.stringify({ carrierId: driverId }), // Changed from driverId to carrierId
     })
+
+    console.log('assignOrderToDriver response:', response.status, response.statusText);
 
     if (!response.ok) {
       const errorText = await response.text()
+      console.error('assignOrderToDriver error:', errorText);
       throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
     }
 
     return true
   } catch (error) {
+    console.error('assignOrderToDriver catch error:', error);
+    return false
+  }
+}
+
+export async function unassignOrderFromDriver(orderId: number): Promise<boolean> {
+  try {
+    console.log('unassignOrderFromDriver called with:', { orderId });
+    
+    const response = await fetch(`/api/shipday/orders/${orderId}/unassign`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    console.log('unassignOrderFromDriver response:', response.status, response.statusText);
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('unassignOrderFromDriver error:', errorText);
+      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
+    }
+
+    return true
+  } catch (error) {
+    console.error('unassignOrderFromDriver catch error:', error);
+    return false
+  }
+}
+
+export async function setOrderReadyToPickup(orderId: number): Promise<boolean> {
+  try {
+    console.log('setOrderReadyToPickup called with:', { orderId });
+    
+    const response = await fetch(`/api/shipday/orders/${orderId}/meta`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ readyToPickup: true }),
+    })
+
+    console.log('setOrderReadyToPickup response:', response.status, response.statusText);
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('setOrderReadyToPickup error:', errorText);
+      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
+    }
+
+    return true
+  } catch (error) {
+    console.error('setOrderReadyToPickup catch error:', error);
     return false
   }
 }

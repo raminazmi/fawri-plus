@@ -8,14 +8,13 @@ export async function PUT(
 
     const body = await request.json()
     const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
-    const encodedApiKey = Buffer.from(apiKey + ':').toString('base64')
 
     const response = await fetch(`https://api.shipday.com/orders/${params.id}/status`, {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${encodedApiKey}`,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify(body),
     })

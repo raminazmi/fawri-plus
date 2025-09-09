@@ -7,21 +7,9 @@ export async function PUT(
   try {
     const orderId = params.id
     const apiKey = 'HeGq3pe4OR.9sRBrevMkRqJZjbaTfsa'
-    const body = await request.json()
-    const { carrierId } = body
     
-    console.log('=== تعيين السائق ===');
+    console.log('=== إلغاء تعيين السائق ===');
     console.log('orderId:', orderId);
-    console.log('carrierId:', carrierId);
-    console.log('body:', body);
-    
-    if (!carrierId) {
-      console.error('carrierId مفقود');
-      return NextResponse.json(
-        { error: 'carrierId is required' },
-        { status: 400 }
-      )
-    }
     
     if (!orderId) {
       console.error('orderId مفقود');
@@ -31,9 +19,9 @@ export async function PUT(
       )
     }
     
-    console.log(`إرسال طلب تعيين: ${orderId} -> ${carrierId}`);
+    console.log(`إرسال طلب إلغاء تعيين: ${orderId}`);
     
-    const response = await fetch(`https://api.shipday.com/orders/assign/${orderId}/${carrierId}`, {
+    const response = await fetch(`https://api.shipday.com/orders/unassign/${orderId}`, {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
@@ -45,11 +33,11 @@ export async function PUT(
 
     if (response.ok) {
       const data = await response.json()
-      console.log(`تم تعيين الطلب بنجاح للسائق:`, data);
+      console.log(`تم إلغاء تعيين السائق بنجاح:`, data);
       return NextResponse.json(data)
     } else {
       const errorText = await response.text()
-      console.error(`خطأ في تعيين الطلب للسائق: ${response.status} ${response.statusText}`, errorText);
+      console.error(`خطأ في إلغاء تعيين السائق: ${response.status} ${response.statusText}`, errorText);
       return NextResponse.json(
         { error: `Shipday API Error: ${response.status} ${response.statusText}`, details: errorText },
         { status: response.status }

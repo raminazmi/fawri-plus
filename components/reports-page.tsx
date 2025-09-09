@@ -119,71 +119,76 @@ export function ReportsPage() {
         </CardContent>
       </Card>
 
-        {error && (
-          <Alert className="mb-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+      <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle>التقارير</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <Alert className="mb-4">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-        {loading ? (
-          <div className="flex justify-center p-4">
-            <Loader2 className="h-6 w-6 animate-spin" />
-          </div>
-        ) : reports.length === 0 ? (
-          <div className="text-center py-4 text-muted-foreground">
-            لا توجد تقارير متاحة
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>رقم الطلب</TableHead>
-                <TableHead>العميل</TableHead>
-                <TableHead>العنوان</TableHead>
-                <TableHead>الحالة</TableHead>
-                <TableHead>التاريخ</TableHead>
-                <TableHead className="text-right">المبلغ</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {reports.map((report) => (
-                <TableRow key={report.id}>
-                  <TableCell>{report.orderId}</TableCell>
-                  <TableCell>{report.customerName}</TableCell>
-                  <TableCell className="max-w-[200px] truncate">{report.address}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <span
-                        className={`w-2 h-2 rounded-full mr-2 ${
-                          report.status === "completed"
-                            ? "bg-green-500"
-                            : report.status === "in_progress"
-                            ? "bg-blue-500"
-                            : report.status === "cancelled"
-                            ? "bg-red-500"
-                            : "bg-yellow-500"
-                        }`}
-                      />
-                      {report.status === "completed"
-                        ? "مكتمل"
-                        : report.status === "in_progress"
-                        ? "قيد التنفيذ"
-                        : report.status === "cancelled"
-                        ? "ملغي"
-                        : "قيد الانتظار"}
-                    </div>
-                  </TableCell>
-                  <TableCell>{new Date(report.date).toLocaleDateString("ar")}</TableCell>
-                  <TableCell className="text-right">
-                    {report.amount.toFixed(2)} ريال
-                  </TableCell>
+          {loading ? (
+            <div className="flex justify-center p-4">
+              <Loader2 className="h-6 w-6 animate-spin" />
+            </div>
+          ) : reports.length === 0 ? (
+            <div className="text-center py-4 text-muted-foreground">
+              لا توجد تقارير متاحة
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>رقم الطلب</TableHead>
+                  <TableHead>العميل</TableHead>
+                  <TableHead>العنوان</TableHead>
+                  <TableHead>الحالة</TableHead>
+                  <TableHead>التاريخ</TableHead>
+                  <TableHead className="text-right">المبلغ</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </CardContent>
-    </Card>
-  </div>
+              </TableHeader>
+              <TableBody>
+                {reports.map((report) => (
+                  <TableRow key={report.id}>
+                    <TableCell>{report.orderId}</TableCell>
+                    <TableCell>{report.customerName}</TableCell>
+                    <TableCell className="max-w-[200px] truncate">{report.address}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center">
+                        <span
+                          className={`w-2 h-2 rounded-full mr-2 ${
+                            report.status === "completed"
+                              ? "bg-green-500"
+                              : report.status === "in_progress"
+                              ? "bg-blue-500"
+                              : report.status === "cancelled"
+                              ? "bg-red-500"
+                              : "bg-yellow-500"
+                          }`}
+                        />
+                        {report.status === "completed"
+                          ? "مكتمل"
+                          : report.status === "in_progress"
+                          ? "قيد التنفيذ"
+                          : report.status === "cancelled"
+                          ? "ملغي"
+                          : "قيد الانتظار"}
+                      </div>
+                    </TableCell>
+                    <TableCell>{new Date(report.date).toLocaleDateString("ar")}</TableCell>
+                    <TableCell className="text-right">
+                      {report.amount.toFixed(2)} ريال
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   )
 }

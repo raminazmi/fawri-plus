@@ -17,7 +17,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { fetchOrders, fetchDrivers, updateOrderStatus, createOrder as createShipdayOrder, createOrderNew, updateOrderNew, assignOrderToDriver, getShipdaySDK } from "@/lib/shipday-api-functions"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { fetchOrders, fetchDrivers, updateOrderStatus, createOrder as createShipdayOrder, createOrderNew, updateOrderNew, assignOrderToDriver, unassignOrderFromDriver, setOrderReadyToPickup, getShipdaySDK } from "@/lib/shipday-api-functions"
 import { formatOrderForShipday, type CreateOrderRequest } from "@/lib/order-formats"
 import { type ShipdayDriver, type ShipdayOrder } from "@/lib/types"
 import { createOrder } from "@/lib/orders"
@@ -35,6 +36,12 @@ import {
   Phone,
   Eye,
   UserPlus,
+  Edit,
+  Trash2,
+  User,
+  Building,
+  DollarSign,
+  Loader2,
 } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 import { Label } from "@/components/ui/label"
@@ -58,6 +65,25 @@ const getStatusOrder = (order: ShipdayOrder) => {
   }
   return map[raw] ?? "pending"
 };
+
+// دالة لتصنيف الطلبات حسب الحالة كما في Shipday
+const getOrderCategory = (order: ShipdayOrder) => {
+  const status = getStatusOrder(order)
+  const now = new Date()
+  const deliveryDate = order.activityLog?.expectedDeliveryTime ? new Date(order.activityLog.expectedDeliveryTime) : null
+  
+  if (status === "delivered") {
+    return "completed"
+  } else if (status === "cancelled") {
+    return "incomplete"
+  } else if (deliveryDate && deliveryDate > now) {
+    return "scheduled"
+  } else if (status === "pending" || status === "assigned" || status === "picked_up" || status === "in_transit") {
+    return "current"
+  } else {
+    return "history"
+  }
+}
 
 const statusIcons = {
   pending: Clock,
@@ -486,32 +512,39 @@ function validateOrderData(orderData: any): { isValid: boolean; errors: string[]
 function AssignDriverButton({ order, drivers, onAssign }: {
   order: ShipdayOrder;
   drivers: ShipdayDriver[];
-  onAssign: (orderNumber: string, driverId: number) => void;
+  onAssign: (orderId: number, driverId: number) => void;
 }) {
   const [selectedDriverId, setSelectedDriverId] = useState<number | null>(null);
+  const [open, setOpen] = useState(false);
 
-  const handleAssign = () => {
+  const handleAssign = async () => {
     if (selectedDriverId) {
-      onAssign(order.orderNumber, selectedDriverId);
+      try {
+        await onAssign(Number(order.orderId), selectedDriverId);
+        setOpen(false); // Close modal after successful assignment
+        setSelectedDriverId(null); // Reset selection
+      } catch (error) {
+        console.error('Error in handleAssign:', error);
+      }
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" className="w-8 h-8 p-0 hover-lift">
           <UserPlus className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] bg-white/95 backdrop-blur-sm border-0 shadow-modern-xl">
-        <DialogHeader className="bg-gradient-to-r from-green-600 to-blue-600 -m-6 mb-6 p-6 text-white rounded-t-lg">
+        <DialogHeader className="bg-[#262626] from-green-600 to-blue-600 -m-6 mb-6 p-6 text-white rounded-t-lg">
           <DialogTitle className="flex items-center gap-3 text-xl">
             <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center">
               <UserPlus className="h-5 w-5" />
             </div>
             <div>
               <span>تعيين سائق للطلب</span>
-              <div className="text-sm text-green-100 mt-1">#{order.orderNumber}</div>
+              <div className="text-sm text-green-100 mt-1 text-start">{order.orderNumber}#</div>
             </div>
           </DialogTitle>
           <DialogDescription className="text-green-100 mt-2">
@@ -574,7 +607,7 @@ function AssignDriverButton({ order, drivers, onAssign }: {
             type="button" 
             onClick={handleAssign} 
             disabled={!selectedDriverId} 
-            className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white hover-lift"
+            className="bg-[#ffcc04] hover:bg-[#ffcc04] text-[#262626] hover-lift"
           >
             <UserPlus className="h-4 w-4 mr-2" />
             تعيين السائق
@@ -595,18 +628,46 @@ export function OrdersPage() {
   const [useCompleteForm, setUseCompleteForm] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [categoryFilter, setCategoryFilter] = useState<string>("current")
+  const [editingOrder, setEditingOrder] = useState<ShipdayOrder | null>(null)
+  const [deletingOrder, setDeletingOrder] = useState<ShipdayOrder | null>(null)
+  const [assigningOrder, setAssigningOrder] = useState<ShipdayOrder | null>(null)
+  const [carriers, setCarriers] = useState<any[]>([])
+  const [loadingCarriers, setLoadingCarriers] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
 
   useEffect(() => {
     loadData()
+    loadCarriers()
   }, [])
+
+  const loadCarriers = async () => {
+    try {
+      setLoadingCarriers(true)
+      // Add delay to avoid 429 errors
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      const response = await fetch('/api/shipday/carriers')
+      if (response.ok) {
+        const data = await response.json()
+        setCarriers(data)
+      }
+    } catch (error) {
+      console.error('خطأ في جلب السائقين:', error)
+    } finally {
+      setLoadingCarriers(false)
+    }
+  }
 
   useEffect(() => {
     filterOrders()
-  }, [orders, searchTerm, statusFilter])
+  }, [orders, searchTerm, statusFilter, categoryFilter])
 
   const loadData = async () => {
     try {      
+      // Add delay to avoid 429 errors
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
       // Use local API routes instead of direct SDK calls
       const [ordersResponse, driversResponse] = await Promise.all([
         fetch('/api/shipday/orders'),
@@ -647,6 +708,9 @@ export function OrdersPage() {
     }
     if (statusFilter !== "all") {
       filtered = filtered.filter((order) => getStatusOrder(order) === statusFilter)
+    }
+    if (categoryFilter !== "all") {
+      filtered = filtered.filter((order) => getOrderCategory(order) === categoryFilter)
     }
     setFilteredOrders(filtered)
   }
@@ -765,81 +829,12 @@ export function OrdersPage() {
     }
   }
 
-  const handleUpdateOrder = async (orderId: string, orderData: any) => {
-    try {
-
-      setLoading(true);
-      setMessage(null);
-
-      // Send order data to update API
-      const response = await fetch(`/api/shipday/orders/${orderId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-      });
-
-
-      if (response.ok) {
-        const result = await response.json();
-        
-        setMessage({
-          type: "success",
-          text: "تم تحديث الطلب بنجاح في Shipday!"
-        });
-        
-        // Show success toast
-        toast({
-          title: "تم تحديث الطلب بنجاح",
-          description: `تم تحديث الطلب #${orderData.orderNumber} في Shipday`,
-        });
-
-        // Refresh orders list
-        setTimeout(() => {
-          loadData();
-        }, 1000);
-      } else {
-        const errorData = await response.json();
-        console.error("[v0] API error:", errorData);
-        setMessage({
-          type: "error",
-          text: errorData.error || "فشل في تحديث الطلب"
-        });
-
-        // Show error toast
-        toast({
-          title: "خطأ في تحديث الطلب",
-          description: errorData.error || "فشل في تحديث الطلب",
-          variant: "destructive",
-        });
-      }
-
-    } catch (error) {
-      let errorMessage = "فشل في تحديث الطلب في Shipday";
-      if (error instanceof Error) {
-        errorMessage += `: ${error.message}`;
-      }
-
-      setMessage({ type: "error", text: errorMessage });
-
-      // Show error toast
-      toast({
-        title: "خطأ في تحديث الطلب",
-        description: errorMessage,
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
     try {
       const apiStatus = UI_TO_API_STATUS[newStatus as keyof typeof UI_TO_API_STATUS]
       await updateOrderStatus(parseInt(orderId), newStatus as any)
 
-      // Update local state
       setOrders(prev => prev.map(order =>
         order.orderNumber === orderId
           ? {
@@ -854,14 +849,14 @@ export function OrdersPage() {
 
       setMessage({ type: "success", text: "تم تحديث حالة الطلب بنجاح" })
     } catch (error) {
-      console.error("[v0] Error updating order status:", error)
       setMessage({ type: "error", text: "فشل في تحديث حالة الطلب" })
     }
   }
 
-  const handleAssignDriver = async (orderNumber: string, driverId: number) => {
+  const handleAssignDriver = async (orderId: number, driverId: number) => {
     try {
-      await assignOrderToDriver(parseInt(orderNumber), driverId);
+      console.log('handleAssignDriver called with:', { orderId, driverId });
+      await assignOrderToDriver(orderId, driverId);
       await loadData(); // Reload data to show the assigned driver
       toast({
         title: "تم تعيين السائق",
@@ -877,6 +872,236 @@ export function OrdersPage() {
     }
   };
 
+  const handleUnassignDriver = async (orderId: number) => {
+    try {
+      console.log('handleUnassignDriver called with:', { orderId });
+      await unassignOrderFromDriver(orderId);
+      await loadData(); // Reload data to show the unassigned order
+      toast({
+        title: "تم إلغاء تعيين السائق",
+        description: "تم إلغاء تعيين السائق من الطلب بنجاح.",
+      });
+    } catch (error) {
+      console.error("Error unassigning driver:", error);
+      toast({
+        title: "فشل إلغاء التعيين",
+        description: "فشل في إلغاء تعيين السائق من الطلب.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSetReadyToPickup = async (orderId: number) => {
+    try {
+      console.log('handleSetReadyToPickup called with:', { orderId });
+      await setOrderReadyToPickup(orderId);
+      await loadData(); // Reload data to show the updated order
+      toast({
+        title: "تم تعيين الطلب جاهز للاستلام",
+        description: "تم تعيين الطلب كجاهز للاستلام بنجاح.",
+      });
+    } catch (error) {
+      console.error("Error setting ready to pickup:", error);
+      toast({
+        title: "فشل تعيين جاهز للاستلام",
+        description: "فشل في تعيين الطلب كجاهز للاستلام.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEditOrder = (order: ShipdayOrder) => {
+    setEditingOrder(order);
+  };
+
+  const handleDeleteOrder = (order: ShipdayOrder) => {
+    setDeletingOrder(order);
+  };
+
+  const confirmDeleteOrder = async () => {
+    if (!deletingOrder) return;
+
+    try {
+      setLoading(true);
+      setMessage(null);
+
+      const response = await fetch(`/api/shipday/orders/${deletingOrder.orderId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        setMessage({
+          type: "success",
+          text: "تم حذف الطلب بنجاح من Shipday!"
+        });
+        
+        toast({
+          title: "تم حذف الطلب بنجاح",
+          description: `تم حذف الطلب #${deletingOrder.orderNumber} من Shipday`,
+        });
+
+        setDeletingOrder(null);
+        setTimeout(() => {
+          loadData();
+        }, 1000);
+      } else {
+        const errorData = await response.json();
+        setMessage({
+          type: "error",
+          text: errorData.error || "فشل في حذف الطلب"
+        });
+
+        toast({
+          title: "خطأ في حذف الطلب",
+          description: errorData.error || "فشل في حذف الطلب",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      let errorMessage = "فشل في حذف الطلب من Shipday";
+      if (error instanceof Error) {
+        errorMessage += `: ${error.message}`;
+      }
+
+      setMessage({ type: "error", text: errorMessage });
+      toast({
+        title: "خطأ في حذف الطلب",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStartAssignOrder = (order: ShipdayOrder) => {
+    setAssigningOrder(order);
+  };
+
+  const handleAssignOrder = async (carrierId: string) => {
+    if (!assigningOrder) return;
+    try {
+      setLoading(true);
+      setMessage(null);
+
+      const response = await fetch(`/api/shipday/orders/${assigningOrder.orderId}/assign`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ carrierId }),
+      });
+
+      if (response.ok) {
+        setMessage({
+          type: "success",
+          text: "تم تعيين الطلب للسائق بنجاح!"
+        });
+        
+        toast({
+          title: "تم تعيين الطلب بنجاح",
+          description: `تم تعيين الطلب #${assigningOrder.orderNumber} للسائق`,
+        });
+
+        setAssigningOrder(null);
+
+        setTimeout(() => {
+          loadData();
+        }, 1000);
+      } else {
+        const errorData = await response.json();
+        setMessage({
+          type: "error",
+          text: errorData.error || "فشل في تعيين الطلب"
+        });
+
+        toast({
+          title: "خطأ في تعيين الطلب",
+          description: errorData.error || "فشل في تعيين الطلب",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      let errorMessage = "فشل في تعيين الطلب للسائق";
+      if (error instanceof Error) {
+        errorMessage += `: ${error.message}`;
+      }
+
+      setMessage({ type: "error", text: errorMessage });
+      toast({
+        title: "خطأ في تعيين الطلب",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateOrder = async (orderData: any) => {
+    if (!editingOrder) return;
+    
+    try {
+      setLoading(true);
+      setMessage(null);
+
+      const response = await fetch(`/api/shipday/orders/${editingOrder.orderId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setMessage({
+          type: "success",
+          text: "تم تحديث الطلب بنجاح في Shipday!"
+        });
+        setEditingOrder(null);
+        
+      toast({
+          title: "تم تحديث الطلب بنجاح",
+          description: `تم تحديث الطلب #${orderData.orderNumber} في Shipday`,
+        });
+
+        setTimeout(() => {
+          loadData();
+        }, 1000);
+      } else {
+        const errorData = await response.json();
+        setMessage({
+          type: "error",
+          text: errorData.error || "فشل في تحديث الطلب"
+        });
+
+        toast({
+          title: "خطأ في تحديث الطلب",
+          description: errorData.error || "فشل في تحديث الطلب",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      let errorMessage = "فشل في تحديث الطلب في Shipday";
+      if (error instanceof Error) {
+        errorMessage += `: ${error.message}`;
+      }
+
+      setMessage({ type: "error", text: errorMessage });
+      toast({
+        title: "خطأ في تحديث الطلب",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <Loading title="جاري تحميل الطلبات..."/>
@@ -885,7 +1110,19 @@ export function OrdersPage() {
 
   if (showOrderForm) {
     return useCompleteForm && 
-      <OrderForm onSubmit={handleNewOrder} onCancel={() => setShowOrderForm(false)} loading={loading} /> 
+      <OrderForm onSubmit={handleNewOrder} onCancel={() => setShowOrderForm(false)} loading={loading} isEdit={false} /> 
+  }
+
+  if (editingOrder) {
+    return (
+      <OrderForm 
+        onSubmit={handleUpdateOrder} 
+        onCancel={() => setEditingOrder(null)} 
+        loading={loading}
+        initialData={editingOrder}
+        isEdit={true}
+      />
+    )
   }
 
   return (
@@ -963,6 +1200,46 @@ export function OrdersPage() {
         </CardContent>
       </Card>
 
+      {/* تصنيف الطلبات حسب الحالة */}
+      <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm">
+        <CardContent className="p-6">
+          <Tabs value={categoryFilter} onValueChange={setCategoryFilter} className="w-full">
+            <TabsList className="grid w-full grid-cols-5 bg-gray-100">
+              <TabsTrigger value="current" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  <span>حالي</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger value="scheduled" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
+                <div className="flex items-center gap-2">
+                  <Package className="h-4 w-4" />
+                  <span>مجدول</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger value="completed" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4" />
+                  <span>مكتمل</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger value="incomplete" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
+                <div className="flex items-center gap-2">
+                  <XCircle className="h-4 w-4" />
+                  <span>غير مكتمل</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger value="history" className="data-[state=active]:bg-gray-500 data-[state=active]:text-white">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>تاريخ</span>
+                </div>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </CardContent>
+      </Card>
+
       <Card className="shadow-modern border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
         <CardHeader className="">
           <CardTitle className="flex items-center gap-2">
@@ -1016,17 +1293,29 @@ export function OrdersPage() {
                           <div>
                             <p className="font-medium text-gray-900">{order.assignedCarrier.name}</p>
                             <p className="text-sm text-gray-500">{order.assignedCarrier.phoneNumber}</p>
+                            <div className="mt-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-6 px-2 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                                onClick={() => handleUnassignDriver(order.orderId)}
+                              >
+                                إلغاء التعيين
+                              </Button>
+                            </div>
                           </div>
                         ) : (
-                          <span className="text-gray-500">غير معين</span>
-                        )}
-                        {getStatusOrder(order) === "pending" && (
-                          <div className="mt-2">
-                            <AssignDriverButton
-                              order={order}
-                              drivers={drivers}
-                              onAssign={handleAssignDriver}
-                            />
+                          <div>
+                            <span className="text-gray-500">غير معين</span>
+                            {getStatusOrder(order) === "pending" && (
+                              <div className="mt-2">
+                                <AssignDriverButton
+                                  order={order}
+                                  drivers={drivers}
+                                  onAssign={handleAssignDriver}
+                                />
+                              </div>
+                            )}
                           </div>
                         )}
                       </TableCell>
@@ -1061,6 +1350,39 @@ export function OrdersPage() {
                             </DialogTrigger>
                             <OrderDetailsModal order={order} />
                           </Dialog>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="h-8 w-8 p-0 hover-lift"
+                            onClick={() => handleEditOrder(order)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="h-8 w-8 p-0 hover-lift text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            onClick={() => handleStartAssignOrder(order)}
+                          >
+                            <Truck className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="h-8 w-8 p-0 hover-lift text-green-600 hover:text-green-700 hover:bg-green-50"
+                            onClick={() => handleSetReadyToPickup(order.orderId)}
+                            title="جاهز للاستلام"
+                          >
+                            <Package className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="h-8 w-8 p-0 hover-lift text-red-600 hover:text-red-700 hover:bg-red-50"
+                            onClick={() => handleDeleteOrder(order)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                           <Select
                             value={status}
                             onValueChange={(newStatus) => handleStatusChange(order.orderNumber, newStatus)}
@@ -1099,6 +1421,146 @@ export function OrdersPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Modal تأكيد الحذف */}
+      <Dialog open={!!deletingOrder} onOpenChange={() => setDeletingOrder(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-red-600">
+              <Trash2 className="h-5 w-5" />
+              تأكيد حذف الطلب
+            </DialogTitle>
+            <DialogDescription>
+              هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {deletingOrder && (
+            <div className="py-4">
+              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <Package className="h-4 w-4 text-blue-600" />
+                  <span className="font-medium">رقم الطلب: #{deletingOrder.orderNumber}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-green-600" />
+                  <span>العميل: {deletingOrder.customer?.name || "غير محدد"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Building className="h-4 w-4 text-orange-600" />
+                  <span>المطعم: {deletingOrder.restaurant?.name || "غير محدد"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-4 w-4 text-green-600" />
+                  <span>المبلغ: ${deletingOrder.costing?.totalCost || 0}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setDeletingOrder(null)}
+              disabled={loading}
+            >
+              إلغاء
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDeleteOrder}
+              disabled={loading}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  جاري الحذف...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  حذف الطلب
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal تعيين السائق */}
+      <Dialog open={!!assigningOrder} onOpenChange={() => setAssigningOrder(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-blue-600">
+              <Truck className="h-5 w-5" />
+              تعيين الطلب للسائق
+            </DialogTitle>
+            <DialogDescription>
+              اختر السائق الذي تريد تعيين الطلب له.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {assigningOrder && (
+            <div className="py-4">
+              <div className="bg-gray-50 rounded-lg p-4 space-y-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <Package className="h-4 w-4 text-blue-600" />
+                  <span className="font-medium">رقم الطلب: #{assigningOrder.orderNumber}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-green-600" />
+                  <span>العميل: {assigningOrder.customer?.name || "غير محدد"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Building className="h-4 w-4 text-orange-600" />
+                  <span>المطعم: {assigningOrder.restaurant?.name || "غير محدد"}</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>اختر السائق</Label>
+                <Select onValueChange={handleAssignOrder} disabled={loading}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="اختر سائق..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {loadingCarriers ? (
+                      <SelectItem value="" disabled>
+                        جاري تحميل السائقين...
+                      </SelectItem>
+                    ) : carriers.length === 0 ? (
+                      <SelectItem value="" disabled>
+                        لا توجد سائقين متاحين
+                      </SelectItem>
+                    ) : (
+                      carriers.map((carrier) => (
+                        <SelectItem key={carrier.id} value={carrier.id.toString()}>
+                          <div className="flex items-center gap-2">
+                            <Truck className="h-4 w-4" />
+                            <span>{carrier.name}</span>
+                            <span className="text-sm text-gray-500">({carrier.phoneNumber})</span>
+                          </div>
+                        </SelectItem>
+                      ))
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setAssigningOrder(null)}
+              disabled={loading}
+            >
+              إلغاء
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
