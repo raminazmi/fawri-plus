@@ -34,7 +34,20 @@
     "phone": "Phone Number",
     "submit": "Submit",
     "cancel": "Cancel",
-    "backToLogin": "Back to Login"
+    "backToLogin": "Back to Login",
+    "welcome": "Welcome",
+    "loginDescription": "Sign in to access your dashboard",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "loggingIn": "Signing in...",
+    "invalidCredentials": "Invalid email or password",
+    "deliverySystem": "Advanced Delivery Management System",
+    "systemDescription": "Comprehensive logistics solutions for order and delivery management with detailed reports and accurate statistics",
+    "orderManagement": "Track and manage all orders",
+    "driverManagement": "Assign and monitor drivers",
+    "reportsDescription": "Detailed statistics and reports",
+    "delivery": "Delivery",
+    "deliveryTracking": "Track delivery status"
   },
   "orders": {
     "title": "Orders",
