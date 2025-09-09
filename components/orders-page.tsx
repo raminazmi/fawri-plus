@@ -659,10 +659,6 @@ export function OrdersPage() {
     }
   }
 
-  useEffect(() => {
-    filterOrders()
-  }, [orders, searchTerm, statusFilter, categoryFilter])
-
   const loadData = async () => {
     try {      
       // Add delay to avoid 429 errors
@@ -714,6 +710,10 @@ export function OrdersPage() {
     }
     setFilteredOrders(filtered)
   }, [orders, searchTerm, statusFilter, categoryFilter])
+
+  useEffect(() => {
+    filterOrders()
+  }, [filterOrders])
 
   const handleSync = async () => {
     setSyncing(true)
