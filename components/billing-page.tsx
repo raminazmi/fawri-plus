@@ -1,6 +1,7 @@
 "use client"
 import type React from "react"
 import { useState, useEffect, useCallback } from "react"
+import { useTranslation } from "@/lib/useTranslation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
