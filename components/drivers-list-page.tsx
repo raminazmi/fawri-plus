@@ -155,8 +155,8 @@ export function DriversListPage() {
       <div className="bg-gradient-to-r from-[#ffcc04] to-[#ffcc04] rounded-2xl p-6 text-[#272626] shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold mb-2">قائمة السائقين</h1>
-            <p>عرض وإدارة جميع السائقين المسجلين في النظام</p>
+            <h1 className="text-2xl font-bold mb-2">{t('drivers.title')}</h1>
+            <p>{t('drivers.managementDesc')}</p>
           </div>
           <div className="flex gap-3">
             <Button 
@@ -172,7 +172,7 @@ export function DriversListPage() {
               className="bg-white/20 hover:bg-white/30 text-[#272626] border-white/30 hover-lift"
             >
               <UserPlus className="h-4 w-4 mr-2" />
-              إضافة سائق
+              {t('drivers.newDriver')}
             </Button>
           </div>
         </div>
@@ -182,7 +182,7 @@ export function DriversListPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Search className="h-5 w-5 text-blue-600" />
-            البحث والتصفية
+{t('common.search')} & {t('common.filter')}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">

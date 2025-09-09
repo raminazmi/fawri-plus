@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { useAuth } from "@/hooks/use-auth"
 import { useTranslation } from "@/lib/useTranslation"
+import { useAppDispatch, useAppSelector } from "@/lib/hooks"
+import { toggleLanguage } from "@/lib/slices/languageSlice"
 import { hasPermission } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Package, Users, CreditCard, Settings, LogOut, Menu, Truck, FileText, UserPlus, LayoutDashboard, Search, Bell, ChevronDown } from "lucide-react"
+import { Package, Users, CreditCard, Settings, LogOut, Menu, Truck, FileText, UserPlus, LayoutDashboard, Search, Bell, ChevronDown, Languages } from "lucide-react"
 import { cn } from "@/lib/utils"
 import SiteFooter from "@/components/site-footer"
 
@@ -38,6 +40,8 @@ const getNavigationItems = (t: (key: string) => string): NavigationItem[] => [
 export function DashboardLayout({ children, currentPage = "orders" }: DashboardLayoutProps) {
   const { user, logout } = useAuth()
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const { currentLanguage } = useAppSelector((state) => state.language)
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -57,8 +61,8 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
             <Image src='/images/fawri_logo_yellow.jpg' alt='Fawri Plus' width={40} height={40} className="rounded-lg" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[#ffcc04]">Fawri Plus</h2>
-            <p className="text-xs text-white">نظام إدارة التوصيل</p>
+            <h2 className="text-lg font-bold text-[#ffcc04]">{t('header.companyName')}</h2>
+            <p className="text-xs text-white">{t('auth.deliverySystem')}</p>
           </div>
         </div>
       </div>
@@ -140,10 +144,10 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
               </SheetContent>
             </Sheet>
             <nav className="hidden sm:flex text-sm text-gray-600">
-              <span>لوحة التحكم</span>
+              <span>{t('navigation.dashboard')}</span>
               <span className="mx-2">/</span>
               <span className="font-medium text-gray-900">
-                {filteredNavItems.find((item) => item.id === currentPage)?.label || "لوحة التحكم"}
+                {filteredNavItems.find((item) => item.id === currentPage)?.label || t('navigation.dashboard')}
               </span>
             </nav>
           </div>
@@ -152,12 +156,21 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
             <div className="relative hidden sm:block">
               <input
                 type="text"
-                placeholder="ابحث هنا..."
+                placeholder={t('common.search')}
                 className="h-9 w-64 text-sm rounded-lg pe-10 ps-4 bg-[#272626]/10 border border-gray-200 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#ffcc04] focus:border-transparent"
               />
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             </div>
             <div className="flex items-center gap-3">
+              <Button
+                onClick={() => dispatch(toggleLanguage())}
+                variant="ghost"
+                size="sm"
+                className="inline-flex items-center gap-1 text-sm hover:bg-gray-100 h-8 px-2"
+              >
+                <Languages className="h-4 w-4" />
+                <span>{currentLanguage === 'ar' ? 'EN' : 'عربي'}</span>
+              </Button>
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-[#ffcc04] flex items-center justify-center">
                   <span className="text-[#272626] font-semibold text-sm">

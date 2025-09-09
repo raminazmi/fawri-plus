@@ -30,29 +30,29 @@ import { getCustomers, type Customer } from "@/lib/subscriptions"
 import { Plus, DollarSign, FileText, AlertCircle, TrendingUp, TrendingDown, CreditCard, Receipt, ArrowRight } from "lucide-react"
 import Loading from "@/components/loading"
 
-const transactionTypeLabels = {
-  subscription: "اشتراك",
-  order_fee: "رسوم طلبات",
-  additional_service: "خدمة إضافية",
-  cash_deduction: "خصم نقدي",
-  payment: "دفعة",
-}
+const getTransactionTypeLabels = (t: (key: string) => string) => ({
+  subscription: t('billing.subscription'),
+  order_fee: t('billing.orderFee'),
+  additional_service: t('billing.additionalService'),
+  cash_deduction: t('billing.cashDeduction'),
+  payment: t('billing.payment'),
+})
 
-const paymentMethodLabels = {
-  cash: "نقداً",
-  bank_transfer: "تحويل بنكي",
-  check: "شيك",
-  credit_card: "بطاقة ائتمان",
-  other: "أخرى",
-}
+const getPaymentMethodLabels = (t: (key: string) => string) => ({
+  cash: t('billing.cash'),
+  bank_transfer: t('billing.bankTransfer'),
+  check: t('billing.check'),
+  credit_card: t('billing.creditCard'),
+  other: t('billing.other'),
+})
 
-const invoiceStatusLabels = {
-  draft: "مسودة",
-  sent: "مرسلة",
-  paid: "مدفوعة",
-  overdue: "متأخرة",
-  cancelled: "ملغية",
-}
+const getInvoiceStatusLabels = (t: (key: string) => string) => ({
+  draft: t('billing.draft'),
+  sent: t('billing.sent'),
+  paid: t('billing.paid'),
+  overdue: t('billing.overdue'),
+  cancelled: t('billing.cancelled'),
+})
 
 const invoiceStatusColors = {
   draft: "secondary",
@@ -63,6 +63,7 @@ const invoiceStatusColors = {
 } as const
 
 export function BillingPage() {
+  const { t } = useTranslation()
   const [customers, setCustomers] = useState<Customer[]>([])
   const [transactions, setTransactions] = useState<BillingTransaction[]>([])
   const [payments, setPayments] = useState<Payment[]>([])

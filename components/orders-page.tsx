@@ -95,14 +95,14 @@ const statusIcons = {
   cancelled: XCircle,
 };
 
-const statusLabels = {
-  pending: "غير معين",
-  assigned: "تم التعيين",
-  picked_up: "تم الاستلام",
-  in_transit: "في الطريق",
-  delivered: "تم التوصيل",
+const getStatusLabels = (t: (key: string) => string) => ({
+  pending: t('orders.pending'),
+  assigned: t('orders.assigned'),
+  picked_up: t('orders.pickedUp'),
+  in_transit: t('orders.inTransit'),
+  delivered: t('orders.delivered'),
   cancelled: t('orders.cancelled'),
-};
+});
 
 const statusColors = {
   pending: "secondary",
@@ -135,13 +135,16 @@ const UI_TO_API_STATUS: Record<
 };
 
 function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
+  const { t } = useTranslation()
+  const statusLabels = getStatusLabels(t)
+  
   const formatTime = (timeString: string) => {
-    if (!timeString) return "غير محدد"
+    if (!timeString) return t('common.noData')
     return new Date(timeString).toLocaleString("en")
   }
 
   const formatTimeOnly = (timeString: string) => {
-    if (!timeString) return "غير محدد"
+    if (!timeString) return t('common.noData')
     return timeString
   }
 
@@ -164,7 +167,7 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
           </div>
         </DialogTitle>
         <DialogDescription className="text-blue-100 mt-2">
-          تاريخ الطلب: {formatTime(order.activityLog?.placementTime || "")}
+          {t('orders.date')}: {formatTime(order.activityLog?.placementTime || "")}
         </DialogDescription>
       </DialogHeader>
       
@@ -176,7 +179,7 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
                 <div className="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                التوصيل إلى
+{t('orders.deliveryTo')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 p-6">
@@ -187,13 +190,13 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
                   </span>
                 </div>
                 <div>
-                  <p className=" text-gray-900">{order.customer?.name || "غير محدد"}</p>
-                  <p className="text-sm text-gray-600">{order.customer?.address || "غير محدد"}</p>
+                  <p className=" text-gray-900">{order.customer?.name || t('common.noData')}</p>
+                  <p className="text-sm text-gray-600">{order.customer?.address || t('common.noData')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm bg-white/50 p-3 rounded-lg">
                 <Phone className="h-4 w-4 text-green-600" />
-                <span className="text-gray-700">{order.customer?.phoneNumber || "غير محدد"}</span>
+                <span className="text-gray-700">{order.customer?.phoneNumber || t('common.noData')}</span>
               </div>
             </CardContent>
           </Card>
@@ -204,7 +207,7 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
                 <div className="h-6 w-6 rounded-full bg-orange-500 flex items-center justify-center">
                   <span className="text-white text-xs">📦</span>
                 </div>
-                الاستلام من
+{t('orders.pickupFrom')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 p-6">
@@ -215,13 +218,13 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
                   </span>
                 </div>
                 <div>
-                  <p className=" text-gray-900">{order.restaurant?.name || "غير محدد"}</p>
-                  <p className="text-sm text-gray-600">{order.restaurant?.address || "غير محدد"}</p>
+                  <p className=" text-gray-900">{order.restaurant?.name || t('common.noData')}</p>
+                  <p className="text-sm text-gray-600">{order.restaurant?.address || t('common.noData')}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm bg-white/50 p-3 rounded-lg">
                 <Phone className="h-4 w-4 text-orange-600" />
-                <span className="text-gray-700">{order.restaurant?.phoneNumber || "غير محدد"}</span>
+                <span className="text-gray-700">{order.restaurant?.phoneNumber || t('common.noData')}</span>
               </div>
             </CardContent>
           </Card>
@@ -232,7 +235,7 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
               <div className="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center">
                 <span className="text-white text-xs">💰</span>
               </div>
-              تفاصيل الطلب المالية
+{t('orders.orderDetails')}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
@@ -241,28 +244,28 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
                 <div className="bg-white/70 p-4 rounded-lg border border-blue-200">
                   <h4 className=" text-gray-800 mb-3 flex items-center gap-2">
                     <span className="h-2 w-2 bg-blue-500 rounded-full"></span>
-                    تفاصيل التكلفة
+{t('orders.orderDetails')}
                   </h4>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-gray-600">الضريبة:</span>
-                      <span className=" text-gray-900">{(order.costing?.tax || 0).toFixed(2)} د.ب</span>
+                      <span className="text-gray-600">{t('orders.tax')}:</span>
+                      <span className=" text-gray-900">{(order.costing?.tax || 0).toFixed(2)} {t('dashboard.currency')}</span>
                 </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-gray-600">رسوم التوصيل:</span>
-                      <span className=" text-gray-900">{(order.costing?.deliveryFee || 0).toFixed(2)} د.ب</span>
+                      <span className="text-gray-600">{t('orders.deliveryFee')}:</span>
+                      <span className=" text-gray-900">{(order.costing?.deliveryFee || 0).toFixed(2)} {t('dashboard.currency')}</span>
                 </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-gray-600">البقشيش:</span>
-                      <span className=" text-gray-900">{(order.costing?.tip || 0).toFixed(2)} د.ب</span>
+                      <span className="text-gray-600">{t('orders.tip')}:</span>
+                      <span className=" text-gray-900">{(order.costing?.tip || 0).toFixed(2)} {t('dashboard.currency')}</span>
                 </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
-                      <span className="text-gray-600">الخصم:</span>
-                      <span className=" text-red-600">-{(order.costing?.discountAmount || 0).toFixed(2)} د.ب</span>
+                      <span className="text-gray-600">{t('orders.discount')}:</span>
+                      <span className=" text-red-600">-{(order.costing?.discountAmount || 0).toFixed(2)} {t('dashboard.currency')}</span>
                 </div>
                     <div className="flex justify-between items-center py-3 bg-gradient-to-r from-green-100 to-green-200 rounded-lg px-4 mt-4">
-                      <span className="font-bold text-green-800">الإجمالي:</span>
-                      <span className="font-bold text-green-800 text-lg">{(order.costing?.totalCost || 0).toFixed(2)} د.ب</span>
+                      <span className="font-bold text-green-800">{t('orders.totalCost')}:</span>
+                      <span className="font-bold text-green-800 text-lg">{(order.costing?.totalCost || 0).toFixed(2)} {t('dashboard.currency')}</span>
                 </div>
               </div>
                 </div>
@@ -621,6 +624,7 @@ function AssignDriverButton({ order, drivers, onAssign }: {
 
 export function OrdersPage() {
   const { t } = useTranslation()
+  const statusLabels = getStatusLabels(t)
   const [orders, setOrders] = useState<ShipdayOrder[]>([])
   const [filteredOrders, setFilteredOrders] = useState<ShipdayOrder[]>([])
   const [drivers, setDrivers] = useState<ShipdayDriver[]>([])
@@ -1141,8 +1145,8 @@ export function OrdersPage() {
       <div className="bg-gradient-to-r from-[#ffcc04] to-[#ffcc04] rounded-2xl p-6 text-[#272626] shadow-modern-lg">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold mb-2">إدارة الطلبات</h1>
-            <p>تتبع وإدارة جميع طلبات التوصيل</p>
+            <h1 className="text-2xl font-bold mb-2">{t('orders.orderManagement')}</h1>
+            <p>{t('orders.orderManagementDesc')}</p>
         </div>
           <div className="flex flex-wrap gap-2">
           <Button
@@ -1153,7 +1157,7 @@ export function OrdersPage() {
               className="bg-white/10 hover:bg-white/20 text-[#272626] border-white/30 hover-lift"
           >
               <Plus className="h-4 w-4 mr-2" />
-            طلب جديد
+{t('orders.newOrder')}
           </Button>
           <Button
             onClick={handleSync}
@@ -1166,7 +1170,7 @@ export function OrdersPage() {
             ) : (
                 <RefreshCw className="h-4 w-4 mr-2" />
             )}
-            تحديث
+{t('common.refresh')}
           </Button>
           </div>
         </div>
@@ -1178,7 +1182,7 @@ export function OrdersPage() {
         <div className="relative flex-1">
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
-            placeholder="البحث في الطلبات..."
+            placeholder={t('orders.searchOrders')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
                 className="pr-10 h-11 bg-gray-50 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
@@ -1186,16 +1190,16 @@ export function OrdersPage() {
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full sm:w-[200px] h-11 bg-gray-50 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20">
-            <SelectValue placeholder="تصفية حسب الحالة" />
+            <SelectValue placeholder={t('orders.filterByStatus')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">جميع الحالات</SelectItem>
-            <SelectItem value="pending">غير معين</SelectItem>
-            <SelectItem value="assigned">تم التعيين</SelectItem>
-            <SelectItem value="picked_up">تم الاستلام</SelectItem>
-            <SelectItem value="in_transit">في الطريق</SelectItem>
-            <SelectItem value="delivered">تم التوصيل</SelectItem>
-            <SelectItem value="cancelled">ملغي</SelectItem>
+            <SelectItem value="all">{t('orders.allStatuses')}</SelectItem>
+            <SelectItem value="pending">{t('orders.pending')}</SelectItem>
+            <SelectItem value="assigned">{t('orders.assigned')}</SelectItem>
+            <SelectItem value="picked_up">{t('orders.pickedUp')}</SelectItem>
+            <SelectItem value="in_transit">{t('orders.inTransit')}</SelectItem>
+            <SelectItem value="delivered">{t('orders.delivered')}</SelectItem>
+            <SelectItem value="cancelled">{t('orders.cancelled')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -1210,31 +1214,31 @@ export function OrdersPage() {
               <TabsTrigger value="current" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
-                  <span>حالي</span>
+                  <span>{t('orders.current')}</span>
                 </div>
               </TabsTrigger>
               <TabsTrigger value="scheduled" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">
                 <div className="flex items-center gap-2">
                   <Package className="h-4 w-4" />
-                  <span>مجدول</span>
+                  <span>{t('orders.scheduled')}</span>
                 </div>
               </TabsTrigger>
               <TabsTrigger value="completed" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4" />
-                  <span>مكتمل</span>
+                  <span>{t('orders.completed')}</span>
                 </div>
               </TabsTrigger>
               <TabsTrigger value="incomplete" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
                 <div className="flex items-center gap-2">
                   <XCircle className="h-4 w-4" />
-                  <span>غير مكتمل</span>
+                  <span>{t('orders.incomplete')}</span>
                 </div>
               </TabsTrigger>
               <TabsTrigger value="history" className="data-[state=active]:bg-gray-500 data-[state=active]:text-white">
                 <div className="flex items-center gap-2">
                   <AlertCircle className="h-4 w-4" />
-                  <span>تاريخ</span>
+                  <span>{t('orders.history')}</span>
                 </div>
               </TabsTrigger>
             </TabsList>
@@ -1246,7 +1250,7 @@ export function OrdersPage() {
         <CardHeader className="">
           <CardTitle className="flex items-center gap-2">
             <Package className="h-5 w-5 text-blue-600" />
-            قائمة الطلبات ({filteredOrders.length})
+{t('orders.ordersList')} ({filteredOrders.length})
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -1254,14 +1258,14 @@ export function OrdersPage() {
             <Table className="w-full">
             <TableHeader>
                 <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
-                  <TableHead className=" text-gray-700 px-4 py-3">رقم الطلب</TableHead>
-                  <TableHead className=" text-gray-700 px-4 py-3">العميل</TableHead>
-                  <TableHead className=" text-gray-700 px-4 py-3">المستلم</TableHead>
-                  <TableHead className=" text-gray-700 px-4 py-3">السائق</TableHead>
-                  <TableHead className=" text-gray-700 px-4 py-3">الحالة</TableHead>
-                  <TableHead className=" text-gray-700 px-4 py-3">المبلغ</TableHead>
-                  <TableHead className=" text-gray-700 px-4 py-3">الوقت</TableHead>
-                  <TableHead className=" text-gray-700 px-4 py-3">الإجراءات</TableHead>
+                  <TableHead className=" text-gray-700 px-4 py-3">{t('orders.orderNumber')}</TableHead>
+                  <TableHead className=" text-gray-700 px-4 py-3">{t('orders.client')}</TableHead>
+                  <TableHead className=" text-gray-700 px-4 py-3">{t('orders.pickupFrom')}</TableHead>
+                  <TableHead className=" text-gray-700 px-4 py-3">{t('drivers.title')}</TableHead>
+                  <TableHead className=" text-gray-700 px-4 py-3">{t('orders.status')}</TableHead>
+                  <TableHead className=" text-gray-700 px-4 py-3">{t('orders.total')}</TableHead>
+                  <TableHead className=" text-gray-700 px-4 py-3">{t('orders.date')}</TableHead>
+                  <TableHead className=" text-gray-700 px-4 py-3">{t('orders.actions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -1280,13 +1284,13 @@ export function OrdersPage() {
                       </TableCell>
                       <TableCell className="px-4 py-3">
                         <div>
-                          <p className="font-medium text-gray-900">{order.customer?.name || "غير محدد"}</p>
+                          <p className="font-medium text-gray-900">{order.customer?.name || t('common.noData')}</p>
                           <p className="text-sm text-gray-500">{order.customer?.phoneNumber}</p>
                         </div>
                       </TableCell>
                       <TableCell className="px-4 py-3">
                         <div>
-                          <p className="font-medium text-gray-900">{order.restaurant?.name || "غير محدد"}</p>
+                          <p className="font-medium text-gray-900">{order.restaurant?.name || t('common.noData')}</p>
                           <p className="text-sm text-gray-500">{order.restaurant?.phoneNumber || ""}</p>
                         </div>
                       </TableCell>
@@ -1302,13 +1306,13 @@ export function OrdersPage() {
                                 className="h-6 px-2 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
                                 onClick={() => handleUnassignDriver(order.orderId)}
                               >
-                                إلغاء التعيين
+{t('orders.unassignDriver')}
                               </Button>
                             </div>
                           </div>
                         ) : (
                           <div>
-                            <span className="text-gray-500">غير معين</span>
+                            <span className="text-gray-500">{t('orders.pending')}</span>
                             {getStatusOrder(order) === "pending" && (
                               <div className="mt-2">
                                 <AssignDriverButton
@@ -1332,14 +1336,14 @@ export function OrdersPage() {
                       </TableCell>
                       <TableCell className="px-4 py-3">
                         <span className=" text-green-600">
-                          {(order.costing?.totalCost || 0).toFixed(2)} د.ب
+                          {(order.costing?.totalCost || 0).toFixed(2)} {t('dashboard.currency')}
                         </span>
                       </TableCell>
                       <TableCell className="px-4 py-3">
                         <span className="text-sm text-gray-600">
                         {order.activityLog?.placementTime
                           ? new Date(order.activityLog.placementTime).toLocaleString("en")
-                          : "غير محدد"}
+                          : t('common.noData')}
                         </span>
                       </TableCell>
                       <TableCell className="px-4 py-3">
@@ -1413,11 +1417,11 @@ export function OrdersPage() {
               <div className="h-16 w-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
                 <Package className="h-8 w-8 text-gray-400" />
             </div>
-              <h3 className="text-lg  text-gray-900 mb-2">لا توجد طلبات</h3>
-              <p className="text-gray-500 mb-4">لم يتم العثور على أي طلبات تطابق معايير البحث</p>
+              <h3 className="text-lg  text-gray-900 mb-2">{t('orders.noOrders')}</h3>
+              <p className="text-gray-500 mb-4">{t('orders.noOrdersDesc')}</p>
               <Button onClick={() => setShowOrderForm(true)} className="hover-lift">
                 <Plus className="h-4 w-4 mr-2" />
-                إضافة طلب جديد
+{t('orders.addNewOrder')}
               </Button>
         </div>
           )}
@@ -1430,10 +1434,10 @@ export function OrdersPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600">
               <Trash2 className="h-5 w-5" />
-              تأكيد حذف الطلب
+{t('orders.confirmDelete')}
             </DialogTitle>
             <DialogDescription>
-              هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.
+{t('orders.deleteConfirmDesc')}
             </DialogDescription>
           </DialogHeader>
           
@@ -1442,19 +1446,19 @@ export function OrdersPage() {
               <div className="bg-gray-50 rounded-lg p-4 space-y-2">
                 <div className="flex items-center gap-2">
                   <Package className="h-4 w-4 text-blue-600" />
-                  <span className="font-medium">رقم الطلب: #{deletingOrder.orderNumber}</span>
+                  <span className="font-medium">{t('orders.orderNumber')}: #{deletingOrder.orderNumber}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4 text-green-600" />
-                  <span>العميل: {deletingOrder.customer?.name || "غير محدد"}</span>
+                  <span>{t('orders.client')}: {deletingOrder.customer?.name || t('common.noData')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Building className="h-4 w-4 text-orange-600" />
-                  <span>المطعم: {deletingOrder.restaurant?.name || "غير محدد"}</span>
+                  <span>{t('orders.pickupFrom')}: {deletingOrder.restaurant?.name || t('common.noData')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <DollarSign className="h-4 w-4 text-green-600" />
-                  <span>المبلغ: ${deletingOrder.costing?.totalCost || 0}</span>
+                  <span>{t('orders.total')}: {deletingOrder.costing?.totalCost || 0} {t('dashboard.currency')}</span>
                 </div>
               </div>
             </div>
@@ -1466,7 +1470,7 @@ export function OrdersPage() {
               onClick={() => setDeletingOrder(null)}
               disabled={loading}
             >
-              إلغاء
+              {t('common.cancel')}
             </Button>
             <Button
               variant="destructive"
@@ -1477,12 +1481,12 @@ export function OrdersPage() {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  جاري الحذف...
+{t('orders.deleting')}
                 </>
               ) : (
                 <>
                   <Trash2 className="mr-2 h-4 w-4" />
-                  حذف الطلب
+{t('orders.deleteOrder')}
                 </>
               )}
             </Button>
