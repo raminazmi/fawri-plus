@@ -62,14 +62,6 @@ export function DriversListPage() {
     password: "",
   })
 
-  useEffect(() => {
-    loadDrivers()
-  }, [])
-
-  useEffect(() => {
-    filterDrivers()
-  }, [drivers, searchTerm, statusFilter])
-
   const loadDrivers = async () => {
     try {
       setLoading(true)
@@ -133,6 +125,14 @@ export function DriversListPage() {
 
     setFilteredDrivers(filtered)
   }, [drivers, searchTerm, statusFilter])
+
+  useEffect(() => {
+    loadDrivers()
+  }, [])
+
+  useEffect(() => {
+    filterDrivers()
+  }, [filterDrivers])
 
   if (loading) {
     return <Loading title="جاري تحميل بيانات السائقين..." />
