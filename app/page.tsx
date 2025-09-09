@@ -18,6 +18,7 @@ import hero2 from "../public/images/hero-image.svg"
 
 function DashboardOverview() {
   const router = useRouter()
+  const { t } = useTranslation()
   const [stats, setStats] = useState({
     totalOrders: 0,
     activeDrivers: 0,
@@ -30,12 +31,12 @@ function DashboardOverview() {
   const [error, setError] = useState<string | null>(null)
   
   const statusLabels: { [key: string]: string } = {
-    pending: "قيد الانتظار",
-    assigned: "تم التعيين",
-    picked_up: "تم الاستلام",
-    in_transit: "في الطريق",
-    delivered: "تم التوصيل",
-    cancelled: "ملغي",
+    pending: t('orders.pending'),
+    assigned: t('orders.assigned'),
+    picked_up: t('orders.pickedUp'),
+    in_transit: t('orders.inTransit'),
+    delivered: t('orders.delivered'),
+    cancelled: t('orders.cancelled'),
   }
 
   const colors = {
@@ -83,10 +84,10 @@ function DashboardOverview() {
         <Alert className={`bg-[${colors.blueLight}]/10 text-[${colors.greyDark}] border-[${colors.blueLight}]`}>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="flex items-center justify-between">
-            <span>يجب تكوين مفتاح Shipday API أولاً لعرض البيانات الحقيقية</span>
+            <span>{t('dashboard.apiKeyRequired')}</span>
             <Button variant="outline" size="sm" onClick={() => router.push("/settings")} className={`bg-[${colors.white}] text-[${colors.black}] hover:bg-[${colors.greyLight}] border-[${colors.greyLight}]`}>
               <Settings className="mr-2 h-4 w-4" />
-              الذهاب للإعدادات
+              {t('dashboard.goToSettings')}
             </Button>
           </AlertDescription>
         </Alert>
@@ -94,45 +95,45 @@ function DashboardOverview() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card className={`shadow-xl`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium">إجمالي الطلبات</CardTitle>
+              <CardTitle className="font-medium">{t('dashboard.totalOrders')}</CardTitle>
               <Package className={`h-4 w-4 text-[${colors.greyDark}]`} />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">--</div>
-              <p className={`text-xs text-[${colors.greyDark}]/70`}>يتطلب API key</p>
+              <p className={`text-xs text-[${colors.greyDark}]/70`}>{t('dashboard.requiresApiKey')}</p>
             </CardContent>
           </Card>
 
           <Card className={`shadow-xl`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium">السائقين النشطين</CardTitle>
+              <CardTitle className="font-medium">{t('dashboard.activeDrivers')}</CardTitle>
               <Truck className={`h-4 w-4 text-[${colors.greyDark}]`} />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">--</div>
-              <p className={`text-xs text-[${colors.greyDark}]/70`}>يتطلب API key</p>
+              <p className={`text-xs text-[${colors.greyDark}]/70`}>{t('dashboard.requiresApiKey')}</p>
             </CardContent>
           </Card>
 
           <Card className={`shadow-xl`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium">العملاء المشتركين</CardTitle>
+              <CardTitle className="font-medium">{t('dashboard.subscribers')}</CardTitle>
               <Users className={`h-4 w-4 text-[${colors.greyDark}]`} />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">89</div>
-              <p className={`text-xs text-[${colors.greyDark}]/70`}>+12% هذا الشهر</p>
+              <p className={`text-xs text-[${colors.greyDark}]/70`}>{t('dashboard.monthlyGrowth')}</p>
             </CardContent>
           </Card>
 
           <Card className={`shadow-xl`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium">الإيرادات</CardTitle>
+              <CardTitle className="font-medium">{t('dashboard.revenue')}</CardTitle>
               <CreditCard className={`h-4 w-4 text-[${colors.greyDark}]`} />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">--</div>
-              <p className={`text-xs text-[${colors.greyDark}]/70`}>يتطلب API key</p>
+              <p className={`text-xs text-[${colors.greyDark}]/70`}>{t('dashboard.requiresApiKey')}</p>
             </CardContent>
           </Card>
         </div>
@@ -142,7 +143,7 @@ function DashboardOverview() {
 
   if (loading) {
     return (
-      <Loading title="جاري تحميل لوحة التحكم ..." />
+      <Loading title={t('dashboard.loading')} />
     )
   }
 
@@ -151,45 +152,45 @@ function DashboardOverview() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium">إجمالي الطلبات</CardTitle>
+            <CardTitle className="font-medium">{t('dashboard.totalOrders')}</CardTitle>
             <Package className={`h-4 w-4 text-[${colors.greyDark}]`} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalOrders}</div>
-            <p className={`text-xs text-[${colors.greyDark}]/70`}>من Shipday</p>
+            <p className={`text-xs text-[${colors.greyDark}]/70`}>{t('dashboard.fromShipday')}</p>
           </CardContent>
         </Card>
 
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium">السائقين النشطين</CardTitle>
+            <CardTitle className="font-medium">{t('dashboard.activeDrivers')}</CardTitle>
             <Truck className={`h-4 w-4 text-[${colors.greyDark}]`} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.activeDrivers}</div>
-            <p className={`text-xs text-[${colors.greyDark}]/70`}>من Shipday</p>
+            <p className={`text-xs text-[${colors.greyDark}]/70`}>{t('dashboard.fromShipday')}</p>
           </CardContent>
         </Card>
 
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium">العملاء المشتركين</CardTitle>
+            <CardTitle className="font-medium">{t('dashboard.subscribers')}</CardTitle>
             <Users className={`h-4 w-4 text-[${colors.greyDark}]`} />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.subscribers}</div>
-            <p className={`text-xs text-[${colors.greyDark}]/70`}>+12% هذا الشهر</p>
+            <p className={`text-xs text-[${colors.greyDark}]/70`}>{t('dashboard.monthlyGrowth')}</p>
           </CardContent>
         </Card>
 
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium">الإيرادات</CardTitle>
+            <CardTitle className="font-medium">{t('dashboard.revenue')}</CardTitle>
             <CreditCard className={`h-4 w-4 text-[${colors.greyDark}]`} />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.revenue.toLocaleString()} د.ب</div>
-            <p className={`text-xs text-[${colors.greyDark}]/70`}>من Shipday</p>
+            <div className="text-2xl font-bold">{stats.revenue.toLocaleString()} {t('dashboard.currency')}</div>
+            <p className={`text-xs text-[${colors.greyDark}]/70`}>{t('dashboard.fromShipday')}</p>
           </CardContent>
         </Card>
       </div>
@@ -197,19 +198,19 @@ function DashboardOverview() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card className={`shadow-xl`}>
           <CardHeader>
-            <CardTitle>الطلبات الحديثة</CardTitle>
-            <CardDescription className={`text-[${colors.greyDark}]`}>من Shipday</CardDescription>
+            <CardTitle>{t('dashboard.recentOrders')}</CardTitle>
+            <CardDescription className={`text-[${colors.greyDark}]`}>{t('dashboard.fromShipday')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {recentOrders.map((order) => (
                 <div key={order.orderNumber} className={`flex items-center justify-between p-3 bg-[${colors.white}] rounded-lg border border-[${colors.greyLight}]`}>
                   <div>
-                    <p className="font-medium">طلب #{order.orderNumber}</p>
+                    <p className="font-medium">{t('orders.order')} #{order.orderNumber}</p>
                     <p className={`text-sm text-[${colors.greyDark}]/70`}>{order.customerName}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">{order.costing?.totalCost} د.ب</p>
+                    <p className="font-medium">{order.costing?.totalCost} {t('dashboard.currency')}</p>
                     <p className={`text-sm text-[${colors.greyDark}]/70`}>{statusLabels[order.status] || order.status}</p>
                   </div>
                 </div>
@@ -220,8 +221,8 @@ function DashboardOverview() {
 
         <Card className={`shadow-xl`}>
           <CardHeader>
-            <CardTitle>حالة السائقين</CardTitle>
-            <CardDescription className={`text-[${colors.greyDark}]`}>من Shipday</CardDescription>
+            <CardTitle>{t('dashboard.driverStatus')}</CardTitle>
+            <CardDescription className={`text-[${colors.greyDark}]`}>{t('dashboard.fromShipday')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -238,7 +239,7 @@ function DashboardOverview() {
                       className={`h-2 w-2 rounded-full ${driver.status === "available" ? "bg-green-500" : "bg-red-500"}`}
                     ></div>
                     <span className={`text-sm text-[${colors.greyDark}]/70`}>
-                      {driver.status === "available" ? "متاح" : "غير متاح"}
+                      {driver.status === "available" ? t('drivers.available') : t('drivers.unavailable')}
                     </span>
                   </div>
                 </div>
@@ -251,29 +252,29 @@ function DashboardOverview() {
       <section className="grid gap-4 md:grid-cols-3">
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium">إدارة الطلبات</CardTitle>
+            <CardTitle className="font-medium">{t('dashboard.orderManagement')}</CardTitle>
             <Package className={`h-4 w-4 text-[${colors.greyDark}]`} />
           </CardHeader>
           <CardContent>
-            <p className={`text-sm text-[${colors.greyDark}]/70`}>منشأة متكاملة لإدارة الطلبات وتتبعها وتحديث حالتها لحظياً.</p>
+            <p className={`text-sm text-[${colors.greyDark}]/70`}>{t('dashboard.orderManagementDesc')}</p>
           </CardContent>
         </Card>
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium">السائقون والتعيين</CardTitle>
+            <CardTitle className="font-medium">{t('dashboard.driverAssignment')}</CardTitle>
             <Truck className={`h-4 w-4 text-[${colors.greyDark}]`} />
           </CardHeader>
           <CardContent>
-            <p className={`text-sm text-[${colors.greyDark}]/70`}>تعيين السائقين وتتبع توفرهم وربطهم بالطلبات بسهولة.</p>
+            <p className={`text-sm text-[${colors.greyDark}]/70`}>{t('dashboard.driverAssignmentDesc')}</p>
           </CardContent>
         </Card>
         <Card className={`shadow-xl`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium">التقارير والفوترة</CardTitle>
+            <CardTitle className="font-medium">{t('dashboard.reportsBilling')}</CardTitle>
             <CreditCard className={`h-4 w-4 text-[${colors.greyDark}]`} />
           </CardHeader>
           <CardContent>
-            <p className={`text-sm text-[${colors.greyDark}]/70`}>لوحات وتقارير مالية ونشاطية لدعم القرارات.</p>
+            <p className={`text-sm text-[${colors.greyDark}]/70`}>{t('dashboard.reportsBillingDesc')}</p>
           </CardContent>
         </Card>
       </section>
@@ -283,6 +284,7 @@ function DashboardOverview() {
 
 export default function HomePage() {
   const { isAuthenticated, loading } = useAuth()
+  const { t } = useTranslation()
     const colors = {
     yellow: "#ffcc04",
     black: "#272626",
@@ -295,7 +297,7 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <Loading title="جاري التحميل ..." />
+      <Loading title={t('common.loading')} />
     )
   }
 

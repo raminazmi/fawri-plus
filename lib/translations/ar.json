@@ -68,7 +68,11 @@
     "edit": "تعديل",
     "delete": "حذف",
     "assign": "تعيين",
-    "unassign": "إلغاء التعيين"
+    "unassign": "إلغاء التعيين",
+    "order": "طلب",
+    "assigned": "تم التعيين",
+    "pickedUp": "تم الاستلام",
+    "inTransit": "في الطريق"
   },
   "clients": {
     "title": "العملاء",
@@ -97,7 +101,9 @@
     "cash": "النقدية",
     "add": "إضافة",
     "edit": "تعديل",
-    "delete": "حذف"
+    "delete": "حذف",
+    "available": "متاح",
+    "unavailable": "غير متاح"
   },
   "reports": {
     "title": "التقارير",
@@ -190,5 +196,26 @@
     "switch": "تبديل اللغة",
     "arabic": "العربية",
     "english": "English"
+  },
+  "dashboard": {
+    "totalOrders": "إجمالي الطلبات",
+    "activeDrivers": "السائقين النشطين",
+    "subscribers": "العملاء المشتركين",
+    "revenue": "الإيرادات",
+    "recentOrders": "الطلبات الحديثة",
+    "driverStatus": "حالة السائقين",
+    "orderManagement": "إدارة الطلبات",
+    "driverAssignment": "السائقون والتعيين",
+    "reportsBilling": "التقارير والفوترة",
+    "orderManagementDesc": "منشأة متكاملة لإدارة الطلبات وتتبعها وتحديث حالتها لحظياً.",
+    "driverAssignmentDesc": "تعيين السائقين وتتبع توفرهم وربطهم بالطلبات بسهولة.",
+    "reportsBillingDesc": "لوحات وتقارير مالية ونشاطية لدعم القرارات.",
+    "fromShipday": "من Shipday",
+    "currency": "د.ب",
+    "monthlyGrowth": "+12% هذا الشهر",
+    "requiresApiKey": "يتطلب API key",
+    "apiKeyRequired": "يجب تكوين مفتاح Shipday API أولاً لعرض البيانات الحقيقية",
+    "goToSettings": "الذهاب للإعدادات",
+    "loading": "جاري تحميل لوحة التحكم ..."
   }
 }

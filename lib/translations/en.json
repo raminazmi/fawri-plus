@@ -68,7 +68,11 @@
     "edit": "Edit",
     "delete": "Delete",
     "assign": "Assign",
-    "unassign": "Unassign"
+    "unassign": "Unassign",
+    "order": "Order",
+    "assigned": "Assigned",
+    "pickedUp": "Picked Up",
+    "inTransit": "In Transit"
   },
   "clients": {
     "title": "Clients",
@@ -97,7 +101,9 @@
     "cash": "Cash",
     "add": "Add",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "available": "Available",
+    "unavailable": "Unavailable"
   },
   "reports": {
     "title": "Reports",
@@ -190,5 +196,26 @@
     "switch": "Switch Language",
     "arabic": "العربية",
     "english": "English"
+  },
+  "dashboard": {
+    "totalOrders": "Total Orders",
+    "activeDrivers": "Active Drivers",
+    "subscribers": "Subscribers",
+    "revenue": "Revenue",
+    "recentOrders": "Recent Orders",
+    "driverStatus": "Driver Status",
+    "orderManagement": "Order Management",
+    "driverAssignment": "Driver Assignment",
+    "reportsBilling": "Reports & Billing",
+    "orderManagementDesc": "Comprehensive facility for managing orders, tracking them, and updating their status in real-time.",
+    "driverAssignmentDesc": "Assign drivers, track their availability, and easily link them to orders.",
+    "reportsBillingDesc": "Financial and activity dashboards and reports to support decision-making.",
+    "fromShipday": "From Shipday",
+    "currency": "BHD",
+    "monthlyGrowth": "+12% this month",
+    "requiresApiKey": "Requires API key",
+    "apiKeyRequired": "Shipday API key must be configured first to display real data",
+    "goToSettings": "Go to Settings",
+    "loading": "Loading dashboard..."
   }
 }
