@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { AuthProvider } from "@/hooks/use-auth"
+import { Providers } from "@/components/providers"
+import { LanguageInitializer } from "@/components/language-initializer"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -30,7 +32,12 @@ html {
         }} />
       </head>
       <body className={GeistSans.className} suppressHydrationWarning={true}>
-        <AuthProvider>{children}</AuthProvider>
+        <Providers>
+          <AuthProvider>
+            <LanguageInitializer />
+            {children}
+          </AuthProvider>
+        </Providers>
       </body>
     </html>
   )

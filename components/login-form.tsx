@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useAuth } from "@/hooks/use-auth"
+import { useTranslation } from "@/lib/useTranslation"
 import { Loader2, Eye, EyeOff, Mail, Lock, Truck, Package, Users, BarChart3 } from "lucide-react"
 
 export function LoginForm() {
@@ -18,6 +19,7 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const { login, loading } = useAuth()
+  const { t } = useTranslation()
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,7 +30,7 @@ export function LoginForm() {
     if (success) {
       router.push('/')
     } else {
-      setError("البريد الإلكتروني أو كلمة المرور غير صحيحة")
+      setError(t('auth.invalidCredentials'))
     }
   }
 
@@ -51,9 +53,9 @@ export function LoginForm() {
                   <Image src='/images/fawri_logo_yellow.jpg' alt='Fawri Plus' width={64} height={64} className="rounded-lg" />
                 </div>
               </div>
-              <CardTitle className="text-2xl font-bold text-black-800">مرحباً بك</CardTitle>
+              <CardTitle className="text-2xl font-bold text-black-800">{t('auth.welcome')}</CardTitle>
               <CardDescription className="text-gray-800">
-                سجل دخولك للوصول إلى لوحة التحكم
+                {t('auth.loginDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -65,13 +67,13 @@ export function LoginForm() {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-800">البريد الإلكتروني</Label>
+                  <Label htmlFor="email" className="text-gray-800">{t('auth.email')}</Label>
                   <div className="relative">
                     <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="email"
                       type="email"
-                      placeholder="أدخل البريد الإلكتروني"
+                      placeholder={t('auth.emailPlaceholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -83,13 +85,13 @@ export function LoginForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-gray-800">كلمة المرور</Label>
+                  <Label htmlFor="password" className="text-gray-800">{t('auth.password')}</Label>
                   <div className="relative">
                     <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="أدخل كلمة المرور"
+                      placeholder={t('auth.passwordPlaceholder')}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -121,10 +123,10 @@ export function LoginForm() {
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      جاري تسجيل الدخول...
+                      {t('auth.loggingIn')}
                     </>
                   ) : (
-                    "تسجيل الدخول"
+                    t('auth.login')
                   )}
                 </Button>
 
@@ -148,35 +150,35 @@ export function LoginForm() {
                 <Image src='/images/fawri_logo_black.jpg' alt='Fawri Plus' width={64} height={64} className="rounded-lg"/>
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-black">Fawri Plus</h1>
-                <p className="text-black">نظام إدارة التوصيل المتطور</p>
+                <h1 className="text-3xl font-bold text-black">{t('header.companyName')}</h1>
+                <p className="text-black">{t('auth.deliverySystem')}</p>
               </div>
             </div>
             <p className="text-black text-lg leading-relaxed">
-              حلول لوجستية متكاملة لإدارة الطلبات والتوصيل مع تقارير مفصلة وإحصائيات دقيقة
+              {t('auth.systemDescription')}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="glass rounded-xl p-4 hover-lift">
               <Package className="h-8 w-8 text-black mb-2" />
-              <h3 className="text-black font-semibold">إدارة الطلبات</h3>
-              <p className="text-black text-sm">تتبع وإدارة جميع الطلبات</p>
+              <h3 className="text-black font-semibold">{t('orders.title')}</h3>
+              <p className="text-black text-sm">{t('auth.orderManagement')}</p>
             </div>
             <div className="glass rounded-xl p-4 hover-lift">
               <Users className="h-8 w-8 text-black mb-2" />
-              <h3 className="text-black font-semibold">إدارة السائقين</h3>
-              <p className="text-black text-sm">تعيين ومتابعة السائقين</p>
+              <h3 className="text-black font-semibold">{t('drivers.title')}</h3>
+              <p className="text-black text-sm">{t('auth.driverManagement')}</p>
             </div>
             <div className="glass rounded-xl p-4 hover-lift">
               <BarChart3 className="h-8 w-8 text-black mb-2" />
-              <h3 className="text-black font-semibold">التقارير</h3>
-              <p className="text-black text-sm">إحصائيات وتقارير مفصلة</p>
+              <h3 className="text-black font-semibold">{t('reports.title')}</h3>
+              <p className="text-black text-sm">{t('auth.reportsDescription')}</p>
             </div>
             <div className="glass rounded-xl p-4 hover-lift">
               <Truck className="h-8 w-8 text-black mb-2" />
-              <h3 className="text-black font-semibold">التوصيل</h3>
-              <p className="text-black text-sm">تتبع حالة التوصيل</p>
+              <h3 className="text-black font-semibold">{t('auth.delivery')}</h3>
+              <p className="text-black text-sm">{t('auth.deliveryTracking')}</p>
             </div>
           </div>
         </div>

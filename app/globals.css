@@ -68,11 +68,16 @@
   }
 }
 
-/* Custom styles for RTL support */
+/* Custom styles for RTL/LTR support */
 html[dir="rtl"] {
   direction: rtl;
 }
 
+html[dir="ltr"] {
+  direction: ltr;
+}
+
+/* RTL overrides */
 html[dir="rtl"] .text-left {
   text-align: right;
 }
@@ -111,6 +116,19 @@ html[dir="rtl"] .pr-4 {
   padding-left: 1rem;
 }
 
+/* RTL support for flexbox */
+html[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .items-start {
+  align-items: flex-end;
+}
+
+html[dir="rtl"] .items-end {
+  align-items: flex-start;
+}
+
 /* RTL support for tabs */
 html[dir="rtl"] [data-slot="tabs-list"] {
   flex-direction: row-reverse;
@@ -123,6 +141,39 @@ html[dir="rtl"] [data-slot="tabs-trigger"] {
 html[dir="rtl"] [data-slot="tabs-trigger"] svg {
   margin-left: 0.375rem;
   margin-right: 0;
+}
+
+/* RTL support for buttons and inputs */
+html[dir="rtl"] .gap-2 > * + * {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+html[dir="rtl"] .gap-3 > * + * {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+
+html[dir="rtl"] .gap-4 > * + * {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+/* RTL support for icons */
+html[dir="rtl"] .lucide-chevron-left {
+  transform: scaleX(-1);
+}
+
+html[dir="rtl"] .lucide-chevron-right {
+  transform: scaleX(-1);
+}
+
+html[dir="rtl"] .lucide-arrow-left {
+  transform: scaleX(-1);
+}
+
+html[dir="rtl"] .lucide-arrow-right {
+  transform: scaleX(-1);
 }
 
 /* Custom scrollbar */

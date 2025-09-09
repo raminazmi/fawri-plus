@@ -3,7 +3,11 @@
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, Phone, Building2, Info, Package } from "lucide-react"
+import { MapPin, Phone, Building2, Info, Package, Languages } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useAppDispatch, useAppSelector } from "@/lib/hooks"
+import { toggleLanguage } from "@/lib/slices/languageSlice"
+import { useTranslation } from "@/lib/useTranslation"
 import logoImg from "../public/images/logo.svg" 
 import heroImg from "../public/images/hero-image.svg"
 
@@ -12,6 +16,14 @@ type SiteHeaderProps = {
 }
 
 export function SiteHeader({ showHero = false }: SiteHeaderProps) {
+  const dispatch = useAppDispatch()
+  const { currentLanguage } = useAppSelector((state) => state.language)
+  const { t } = useTranslation()
+
+  const handleLanguageToggle = () => {
+    dispatch(toggleLanguage())
+  }
+
   return (
     <div className="w-full">
       <div className="w-full bg-[#574b9f] text-[#ececec] border-b border-[#d2d2d2]">
@@ -26,18 +38,28 @@ export function SiteHeader({ showHero = false }: SiteHeaderProps) {
                 className="rounded-full border-2 border-[#59c5c7] flex-shrink-0"
               />
               <div className="flex flex-col">
-                <span className="text-sm font-extrabold leading-tight">Fawri Plus Delivery</span>
-                <span className="text-xs opacity-90 text-[#ececec]">BLUE ALFA CONSULTANCY COMPANY • CR 184417-1</span>
+                <span className="text-sm font-extrabold leading-tight">{t('header.companyName')}</span>
+                <span className="text-xs opacity-90 text-[#ececec]">{t('header.companySubtitle')}</span>
               </div>
             </div>
 
             <div className="flex items-center gap-3 justify-center sm:justify-end">
+              <Button
+                onClick={handleLanguageToggle}
+                variant="ghost"
+                size="sm"
+                className="inline-flex items-center gap-1 text-xs hover:bg-[#574b9f]/20 text-[#ececec] h-auto py-1 px-2"
+              >
+                <Languages className="h-3.5 w-3.5" />
+                <span>{currentLanguage === 'ar' ? 'EN' : 'عربي'}</span>
+              </Button>
+              <span className="text-[#d2d2d2] text-opacity-50">|</span>
               <Link
                 href="tel:33831996"
                 className="inline-flex items-center gap-1 text-xs font-semibold hover:underline text-[#ececec]"
               >
                 <Phone className="h-3.5 w-3.5" />
-                <span>3383 1996</span>
+                <span>{t('header.phone')}</span>
               </Link>
               <span className="text-[#d2d2d2] text-opacity-50">|</span>
               <Link
@@ -46,12 +68,12 @@ export function SiteHeader({ showHero = false }: SiteHeaderProps) {
                 className="inline-flex items-center gap-1 text-xs hover:underline text-[#ececec]"
               >
                 <MapPin className="h-3.5 w-3.5" />
-                <span>الموقع على الخريطة</span>
+                <span>{t('header.location')}</span>
               </Link>
               <span className="text-[#d2d2d2] text-opacity-50 hidden md:block">|</span>
               <div className="hidden md:inline-flex items-center gap-1 text-xs text-[#ececec] opacity-90">
                 <Building2 className="h-3.5 w-3.5" />
-                <span>Office 305, Building 1691Y, Road 432, Block 704</span>
+                <span>{t('header.address')}</span>
               </div>
             </div>
           </div>
@@ -86,16 +108,16 @@ export function SiteHeader({ showHero = false }: SiteHeaderProps) {
               />
             </div>
             
-            <div className="flex flex-col items-end text-right max-w-xl pr-4">
+            <div className={`flex flex-col max-w-xl pr-4 ${currentLanguage === 'ar' ? 'items-end text-right' : 'items-start text-left'}`}>
               <div className="inline-flex items-center gap-2 rounded-full bg-[#59c5c7] text-[#272626] px-3 py-1 text-xs font-bold shadow-md">
                 <Info className="h-3.5 w-3.5 text-[#272626]" /> 
-                Registered in Kingdom of Bahrain
+                {t('header.registered')}
               </div>
               <h1 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[#ececec]">
-                Fawri Plus Delivery
+                {t('header.companyName')}
               </h1>
               <p className="mt-2 text-[#ececec] opacity-90 text-sm sm:text-base leading-relaxed">
-                Office 305, Building 1691Y, Road 432, Block 704 — 5GHH+MRR Salmabad, Bahrain
+                {t('header.fullAddress')}
               </p>
             </div>
           </div>
