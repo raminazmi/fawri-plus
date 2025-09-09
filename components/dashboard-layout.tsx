@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { useAuth } from "@/hooks/use-auth"
 import { hasPermission } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
@@ -10,7 +11,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Package, Users, CreditCard, Settings, LogOut, Menu, Truck, FileText, UserPlus, LayoutDashboard, Search, Bell, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import SiteFooter from "@/components/site-footer"
-import Image from "next/image"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -51,7 +51,7 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
       <div className="flex items-center justify-between p-6 border-b border-slate-700/50 flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-            <img src='/images/fawri_logo_yellow.jpg' alt='Fawri Plus' className="rounded-lg" />
+            <Image src='/images/fawri_logo_yellow.jpg' alt='Fawri Plus' width={40} height={40} className="rounded-lg" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-[#ffcc04]">Fawri Plus</h2>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -68,11 +68,7 @@ export function DriverCashPage() {
   })
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
 
-  useEffect(() => {
-    loadData()
-  }, [selectedDriver, dateRange])
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [driversData, ordersData, paymentsData, summaryData] = await Promise.all([
         getDrivers(),
@@ -101,7 +97,11 @@ export function DriverCashPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedDriver, dateRange])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   const handleAddPayment = async (paymentData: Parameters<typeof addCashPayment>[0]) => {
     try {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useAuth } from "@/hooks/use-auth"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,11 +20,7 @@ export function ReportsPage() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>()
   const [status, setStatus] = useState<string>("all")
 
-  useEffect(() => {
-    loadReports()
-  }, [dateRange, status])
-
-  const loadReports = async () => {
+  const loadReports = useCallback(async () => {
     try {
       setLoading(true)
       const data = await getReports({
@@ -38,7 +34,11 @@ export function ReportsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [dateRange, status])
+
+  useEffect(() => {
+    loadReports()
+  }, [loadReports])
 
   const handleExport = () => {
     const csvContent = [

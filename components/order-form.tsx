@@ -558,7 +558,7 @@ export function OrderForm({ onSubmit, onCancel, loading = false, initialData, is
                   <div className="text-center py-8 text-gray-500">
                     <Package className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                     <p>لا توجد عناصر في الطلب</p>
-                    <p className="text-sm">اضغط على "إضافة عنصر" لإضافة عناصر للطلب</p>
+                    <p className="text-sm">اضغط على &quot;إضافة عنصر&quot; لإضافة عناصر للطلب</p>
                   </div>
                 )}
 

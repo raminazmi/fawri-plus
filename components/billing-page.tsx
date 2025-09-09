@@ -1,6 +1,6 @@
 "use client"
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -100,11 +100,7 @@ export function BillingPage() {
     periodEnd: new Date().toISOString().split("T")[0],
   })
 
-  useEffect(() => {
-    loadData()
-  }, [selectedCustomer, dateRange])
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const [customersData, transactionsData, paymentsData, invoicesData, summariesData] = await Promise.all([
         getCustomers(),
@@ -136,7 +132,11 @@ export function BillingPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedCustomer, dateRange])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   const handleAddTransaction = async (e: React.FormEvent) => {
     e.preventDefault()

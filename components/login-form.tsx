@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,7 +11,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useAuth } from "@/hooks/use-auth"
 import { Loader2, Eye, EyeOff, Mail, Lock, Truck, Package, Users, BarChart3 } from "lucide-react"
-import Image from "next/image"
 
 export function LoginForm() {
   const [email, setEmail] = useState("")
@@ -48,7 +48,7 @@ export function LoginForm() {
               <div className="mx-auto mb-4 h-16 w-16 rounded-2xl flex items-center justify-center shadow-modern-lg" style={{ background: 'linear-gradient(135deg, #ffcc04 0%, #FACD18FF 100%)'}}>
                 <div className="h-16 w-16 rounded-2xl flex items-center justify-center shadow-modern-lg" style={{ background: 'linear-gradient(135deg, #ffcc04 0%, #FACD18FF 100%)'}}>
                   <Truck className="h-8 w-8 text-black" />
-                  <img src='/images/fawri_logo_yellow.jpg' alt='Fawri Plus' className="rounded-lg" />
+                  <Image src='/images/fawri_logo_yellow.jpg' alt='Fawri Plus' width={64} height={64} className="rounded-lg" />
                 </div>
               </div>
               <CardTitle className="text-2xl font-bold text-black-800">مرحباً بك</CardTitle>
@@ -145,7 +145,7 @@ export function LoginForm() {
             <div className="flex items-center space-x-3 space-x-reverse">
               <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-modern-lg">
                 <Truck className="h-8 w-8 text-black" />
-                <img src='/images/fawri_logo_black.jpg' alt='Fawri Plus' className="rounded-lg"/>
+                <Image src='/images/fawri_logo_black.jpg' alt='Fawri Plus' width={64} height={64} className="rounded-lg"/>
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-black">Fawri Plus</h1>

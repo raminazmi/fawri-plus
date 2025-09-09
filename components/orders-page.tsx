@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -696,7 +696,7 @@ export function OrdersPage() {
     }
   }
 
-  const filterOrders = () => {
+  const filterOrders = useCallback(() => {
     let filtered = orders
     if (searchTerm) {
       filtered = filtered.filter(
@@ -713,7 +713,7 @@ export function OrdersPage() {
       filtered = filtered.filter((order) => getOrderCategory(order) === categoryFilter)
     }
     setFilteredOrders(filtered)
-  }
+  }, [orders, searchTerm, statusFilter, categoryFilter])
 
   const handleSync = async () => {
     setSyncing(true)

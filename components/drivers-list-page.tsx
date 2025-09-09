@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -116,7 +116,7 @@ export function DriversListPage() {
     }
   }
 
-  const filterDrivers = () => {
+  const filterDrivers = useCallback(() => {
     let filtered = drivers
     if (searchTerm) {
       filtered = filtered.filter(
@@ -132,7 +132,7 @@ export function DriversListPage() {
     }
 
     setFilteredDrivers(filtered)
-  }
+  }, [drivers, searchTerm, statusFilter])
 
   if (loading) {
     return <Loading title="جاري تحميل بيانات السائقين..." />
