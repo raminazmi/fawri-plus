@@ -158,7 +158,23 @@
     "available": "Available",
     "unavailable": "Unavailable",
     "busy": "Busy",
-    "offline": "Offline"
+    "offline": "Offline",
+    "managementDesc": "View and manage all drivers registered in the system",
+    "searchPlaceholder": "Search by name, phone, or email...",
+    "totalDrivers": "Total Drivers",
+    "driver": "driver",
+    "plate": "Plate",
+    "noResults": "No Results",
+    "noResultsDesc": "No drivers found matching search criteria",
+    "noDrivers": "No drivers registered in the system",
+    "addNewDriver": "Add New Driver",
+    "addNewDriverDesc": "Add a new driver to the Shipday system",
+    "namePlaceholder": "Enter driver name",
+    "phonePlaceholder": "Enter phone number",
+    "emailPlaceholder": "Enter email address",
+    "tempPassword": "Temporary Password",
+    "tempPasswordPlaceholder": "Enter temporary password",
+    "adding": "Adding..."
   },
   "reports": {
     "title": "Reports",
@@ -246,7 +262,8 @@
     "total": "Total",
     "noData": "No data available",
     "required": "Required",
-    "optional": "Optional"
+    "optional": "Optional",
+    "clearFilters": "Clear Filters"
   },
   "language": {
     "switch": "Switch Language",

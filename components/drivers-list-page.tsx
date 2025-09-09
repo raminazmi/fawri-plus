@@ -190,31 +190,31 @@ export function DriversListPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">{t('common.search')}</label>
               <Input
-                placeholder="البحث بالاسم أو الهاتف أو البريد الإلكتروني..."
+                placeholder={t('drivers.searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-11 bg-gray-50 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">الحالة</label>
+              <label className="text-sm font-medium text-gray-700">{t('drivers.status')}</label>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-full !h-11 bg-gray-50 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">جميع الحالات</SelectItem>
-                  <SelectItem value="available">متاح</SelectItem>
-                  <SelectItem value="busy">مشغول</SelectItem>
-                  <SelectItem value="offline">غير متصل</SelectItem>
+                  <SelectItem value="all">{t('orders.allStatuses')}</SelectItem>
+                  <SelectItem value="available">{t('drivers.available')}</SelectItem>
+                  <SelectItem value="busy">{t('drivers.busy')}</SelectItem>
+                  <SelectItem value="offline">{t('drivers.offline')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">إجمالي السائقين</label>
+              <label className="text-sm font-medium text-gray-700">{t('drivers.totalDrivers')}</label>
               <div className="flex items-center h-11 px-3 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border border-blue-200">
                 <Truck className="h-4 w-4 text-blue-600 mr-2" />
-                <span className="text-sm font-medium text-blue-700">{filteredDrivers.length} سائق</span>
+                <span className="text-sm font-medium text-blue-700">{filteredDrivers.length} {t('drivers.driver')}</span>
               </div>
             </div>
           </div>
@@ -233,7 +233,7 @@ export function DriversListPage() {
                       <Truck className="h-5 w-5 text-blue-600" />
                       {driver.name}
                     </CardTitle>
-                    <CardDescription>السائق #{driver.id}</CardDescription>
+                    <CardDescription>{t('drivers.driver')} #{driver.id}</CardDescription>
                   </div>
                   <Badge variant={statusColors[driver.status] || "secondary"} className="flex items-center gap-1">
                     <StatusIcon className="h-3 w-3" />
@@ -265,7 +265,7 @@ export function DriversListPage() {
                       </div>
                       {driver.vehicle.plate && (
                         <div className="text-sm text-gray-600 mr-6">
-                          لوحة: {driver.vehicle.plate}
+                          {t('drivers.plate')}: {driver.vehicle.plate}
                         </div>
                       )}
                     </div>
@@ -290,11 +290,11 @@ export function DriversListPage() {
         <Card>
           <CardContent className="text-center py-8">
             <Truck className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">لا توجد نتائج</h3>
+            <h3 className="text-lg font-semibold mb-2">{t('drivers.noResults')}</h3>
             <p className="text-muted-foreground">
               {searchTerm || statusFilter !== "all" 
-                ? "لم يتم العثور على سائقين يطابقون معايير البحث" 
-                : "لا يوجد سائقين مسجلين في النظام"}
+                ? t('drivers.noResultsDesc') 
+                : t('drivers.noDrivers')}
             </p>
             {(searchTerm || statusFilter !== "all") && (
               <Button 
@@ -305,7 +305,7 @@ export function DriversListPage() {
                 }}
                 className="mt-4"
               >
-                مسح الفلاتر
+{t('common.clearFilters')}
               </Button>
             )}
           </CardContent>
@@ -315,57 +315,57 @@ export function DriversListPage() {
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>إضافة سائق جديد</DialogTitle>
+            <DialogTitle>{t('drivers.addNewDriver')}</DialogTitle>
             <DialogDescription>
-              إضافة سائق جديد إلى نظام Shipday
+              {t('drivers.addNewDriverDesc')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">اسم السائق</Label>
+              <Label htmlFor="name">{t('drivers.name')}</Label>
               <Input
                 id="name"
                 value={newDriver.name}
                 onChange={(e) => setNewDriver({ ...newDriver, name: e.target.value })}
-                placeholder="أدخل اسم السائق"
+                placeholder={t('drivers.namePlaceholder')}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">رقم الهاتف</Label>
+              <Label htmlFor="phone">{t('drivers.phone')}</Label>
               <Input
                 id="phone"
                 value={newDriver.phone}
                 onChange={(e) => setNewDriver({ ...newDriver, phone: e.target.value })}
-                placeholder="أدخل رقم الهاتف"
+                placeholder={t('drivers.phonePlaceholder')}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">البريد الإلكتروني</Label>
+              <Label htmlFor="email">{t('drivers.email')}</Label>
               <Input
                 id="email"
                 type="email"
                 value={newDriver.email}
                 onChange={(e) => setNewDriver({ ...newDriver, email: e.target.value })}
-                placeholder="أدخل البريد الإلكتروني"
+                placeholder={t('drivers.emailPlaceholder')}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">كلمة المرور المؤقتة</Label>
+              <Label htmlFor="password">{t('drivers.tempPassword')}</Label>
               <Input
                 id="password"
                 type="password"
                 value={newDriver.password}
                 onChange={(e) => setNewDriver({ ...newDriver, password: e.target.value })}
-                placeholder="أدخل كلمة المرور المؤقتة"
+                placeholder={t('drivers.tempPasswordPlaceholder')}
               />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddDialog(false)}>
-              إلغاء
+              {t('common.cancel')}
             </Button>
             <Button onClick={handleAddDriver} disabled={addingDriver}>
-              {addingDriver ? "جاري الإضافة..." : "إضافة السائق"}
+              {addingDriver ? t('drivers.adding') : t('drivers.add')}
             </Button>
           </DialogFooter>
         </DialogContent>

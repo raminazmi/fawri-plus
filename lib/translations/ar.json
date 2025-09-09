@@ -158,7 +158,23 @@
     "available": "متاح",
     "unavailable": "غير متاح",
     "busy": "مشغول",
-    "offline": "غير متصل"
+    "offline": "غير متصل",
+    "managementDesc": "عرض وإدارة جميع السائقين المسجلين في النظام",
+    "searchPlaceholder": "البحث بالاسم أو الهاتف أو البريد الإلكتروني...",
+    "totalDrivers": "إجمالي السائقين",
+    "driver": "سائق",
+    "plate": "لوحة",
+    "noResults": "لا توجد نتائج",
+    "noResultsDesc": "لم يتم العثور على سائقين يطابقون معايير البحث",
+    "noDrivers": "لا يوجد سائقين مسجلين في النظام",
+    "addNewDriver": "إضافة سائق جديد",
+    "addNewDriverDesc": "إضافة سائق جديد إلى نظام Shipday",
+    "namePlaceholder": "أدخل اسم السائق",
+    "phonePlaceholder": "أدخل رقم الهاتف",
+    "emailPlaceholder": "أدخل البريد الإلكتروني",
+    "tempPassword": "كلمة المرور المؤقتة",
+    "tempPasswordPlaceholder": "أدخل كلمة المرور المؤقتة",
+    "adding": "جاري الإضافة..."
   },
   "reports": {
     "title": "التقارير",
@@ -246,7 +262,8 @@
     "total": "المجموع",
     "noData": "لا توجد بيانات",
     "required": "مطلوب",
-    "optional": "اختياري"
+    "optional": "اختياري",
+    "clearFilters": "مسح الفلاتر"
   },
   "language": {
     "switch": "تبديل اللغة",
