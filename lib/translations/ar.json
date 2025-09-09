@@ -257,6 +257,27 @@
     "enabled": "مفعل",
     "disabled": "معطل"
   },
+  "shipday": {
+    "connected": "متصل",
+    "disconnected": "غير متصل"
+  },
+  "billing": {
+    "subscription": "اشتراك",
+    "orderFee": "رسوم طلبات",
+    "additionalService": "خدمة إضافية",
+    "cashDeduction": "خصم نقدي",
+    "payment": "دفعة",
+    "cash": "نقداً",
+    "bankTransfer": "تحويل بنكي",
+    "check": "شيك",
+    "creditCard": "بطاقة ائتمان",
+    "other": "أخرى",
+    "draft": "مسودة",
+    "sent": "مرسلة",
+    "paid": "مدفوعة",
+    "overdue": "متأخرة",
+    "cancelled": "ملغية"
+  },
   "dashboard": {
     "totalOrders": "إجمالي الطلبات",
     "activeDrivers": "السائقين النشطين",
