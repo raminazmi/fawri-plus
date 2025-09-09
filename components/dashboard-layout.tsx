@@ -61,7 +61,7 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
             <Image src='/images/fawri_logo_yellow.jpg' alt='Fawri Plus' width={40} height={40} className="rounded-lg" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[#ffcc04]">{t('header.companyName')}</h2>
+            <h2 className="text-lg font-bold text-[#ffcc04]">Fawri Plus</h2>
             <p className="text-xs text-white">{t('auth.deliverySystem')}</p>
           </div>
         </div>
