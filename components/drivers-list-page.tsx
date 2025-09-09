@@ -188,7 +188,7 @@ export function DriversListPage() {
         <CardContent className="p-6">
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">البحث</label>
+              <label className="text-sm font-medium text-gray-700">{t('common.search')}</label>
               <Input
                 placeholder="البحث بالاسم أو الهاتف أو البريد الإلكتروني..."
                 value={searchTerm}
