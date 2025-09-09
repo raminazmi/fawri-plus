@@ -15,6 +15,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
+      // Clear any existing auth data and redirect to login
+      localStorage.removeItem("auth_user")
+      localStorage.removeItem("auth_token")
       router.push('/login')
     }
   }, [isAuthenticated, loading, router])

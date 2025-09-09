@@ -3,11 +3,14 @@
 import React from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { UsersPage } from "@/components/users-page"
+import { ProtectedRoute } from "@/components/protected-route"
 
 export default function Users() {
   return (
-    <DashboardLayout currentPage="users">
-      <UsersPage />
-    </DashboardLayout>
+    <ProtectedRoute>
+      <DashboardLayout currentPage="users">
+        <UsersPage />
+      </DashboardLayout>
+    </ProtectedRoute>
   )
 }

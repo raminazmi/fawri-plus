@@ -168,7 +168,6 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
                 size="sm"
                 className="inline-flex items-center gap-1 text-sm hover:bg-gray-100 h-8 px-2"
               >
-                <Languages className="h-4 w-4" />
                 <span>{currentLanguage === 'ar' ? 'EN' : 'عربي'}</span>
               </Button>
               <div className="flex items-center gap-2">

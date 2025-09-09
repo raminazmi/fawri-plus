@@ -9,6 +9,7 @@ import { useTranslation } from "@/lib/useTranslation"
 import Loading from "@/components/loading"
 import { LoginForm } from "@/components/login-form"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { ProtectedRoute } from "@/components/protected-route"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -283,9 +284,8 @@ function DashboardOverview() {
 }
 
 export default function HomePage() {
-  const { isAuthenticated, loading } = useAuth()
   const { t } = useTranslation()
-    const colors = {
+  const colors = {
     yellow: "#ffcc04",
     black: "#272626",
     white: "#ececec",
@@ -295,19 +295,11 @@ export default function HomePage() {
     blueDark: "#574b9f",
   }
 
-  if (loading) {
-    return (
-      <Loading title={t('common.loading')} />
-    )
-  }
-
-  if (!isAuthenticated) {
-    return <LoginForm />
-  }
-
   return (
-    <DashboardLayout currentPage="dashboard">
-      <DashboardOverview />
-    </DashboardLayout>
+    <ProtectedRoute>
+      <DashboardLayout currentPage="dashboard">
+        <DashboardOverview />
+      </DashboardLayout>
+    </ProtectedRoute>
   )
 }

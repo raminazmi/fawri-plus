@@ -90,6 +90,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
     } finally {
       setAuthState({ user: null, isAuthenticated: false })
+      // Redirect to login page
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login'
+      }
     }
   }
 

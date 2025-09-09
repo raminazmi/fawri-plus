@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/login', '/register', '/forgot-password', '/']
+  const publicRoutes = ['/login', '/register', '/forgot-password']
   
   // Check if the current path is a public route
   if (publicRoutes.includes(pathname)) {
@@ -14,6 +14,7 @@ export function middleware(request: NextRequest) {
 
   // For protected routes, we'll let the client-side handle authentication
   // since we can't access localStorage from middleware
+  // The ProtectedRoute component will handle the redirect logic
   return NextResponse.next()
 }
 
