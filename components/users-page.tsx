@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { useAuth } from "@/hooks/use-auth"
+import { useTranslation } from "@/lib/useTranslation"
 import { hasPermission } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -121,6 +122,7 @@ const UserForm = ({ formData, setFormData, handleSubmit, loading, selectedUser, 
 
 export function UsersPage() {
   const { user } = useAuth()
+  const { t } = useTranslation()
   const [users, setUsers] = useState<UserData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -298,7 +300,7 @@ export function UsersPage() {
                           "px-2 py-1 rounded-full text-xs font-semibold",
                           user.role === "admin" ? "bg-indigo-100 text-indigo-700" : "bg-purple-100 text-purple-700"
                         )}>
-                          {user.role === "admin" ? "مدير" : "مشرف"}
+                          {user.role === "admin" ? t('users.admin') : t('users.manager')}
                         </span>
                       </TableCell>
                       <TableCell className="text-gray-500 text-right">{new Date(user.createdAt).toLocaleDateString("ar", { year: 'numeric', month: 'long', day: 'numeric' })}</TableCell>

@@ -72,7 +72,11 @@
     "order": "Order",
     "assigned": "Assigned",
     "pickedUp": "Picked Up",
-    "inTransit": "In Transit"
+    "inTransit": "In Transit",
+    "customerInitial": "C",
+    "restaurantInitial": "R",
+    "completed": "Completed",
+    "inProgress": "In Progress"
   },
   "clients": {
     "title": "Clients",
@@ -103,7 +107,9 @@
     "edit": "Edit",
     "delete": "Delete",
     "available": "Available",
-    "unavailable": "Unavailable"
+    "unavailable": "Unavailable",
+    "busy": "Busy",
+    "offline": "Offline"
   },
   "reports": {
     "title": "Reports",
@@ -181,6 +187,7 @@
     "export": "Export",
     "import": "Import",
     "refresh": "Refresh",
+    "refreshing": "Refreshing...",
     "back": "Back",
     "next": "Next",
     "previous": "Previous",
@@ -196,6 +203,10 @@
     "switch": "Switch Language",
     "arabic": "العربية",
     "english": "English"
+  },
+  "webhooks": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
   },
   "dashboard": {
     "totalOrders": "Total Orders",

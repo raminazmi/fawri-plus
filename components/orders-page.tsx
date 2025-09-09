@@ -23,6 +23,7 @@ import { formatOrderForShipday, type CreateOrderRequest } from "@/lib/order-form
 import { type ShipdayDriver, type ShipdayOrder } from "@/lib/types"
 import { createOrder } from "@/lib/orders"
 import { OrderForm } from "@/components/order-form"
+import { useTranslation } from "@/lib/useTranslation"
 import {
   Plus,
   Search,
@@ -100,7 +101,7 @@ const statusLabels = {
   picked_up: "تم الاستلام",
   in_transit: "في الطريق",
   delivered: "تم التوصيل",
-  cancelled: "ملغي",
+  cancelled: t('orders.cancelled'),
 };
 
 const statusColors = {
@@ -182,7 +183,7 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
                   <span className="text-green-600  text-sm">
-                    {order.customer?.name?.charAt(0) || "ع"}
+                    {order.customer?.name?.charAt(0) || t('orders.customerInitial')}
                   </span>
                 </div>
                 <div>
@@ -210,7 +211,7 @@ function OrderDetailsModal({ order }: { order: ShipdayOrder }) {
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
                   <span className="text-orange-600  text-sm">
-                    {order.restaurant?.name?.charAt(0) || "م"}
+                    {order.restaurant?.name?.charAt(0) || t('orders.restaurantInitial')}
                   </span>
                 </div>
                 <div>
@@ -619,6 +620,7 @@ function AssignDriverButton({ order, drivers, onAssign }: {
 }
 
 export function OrdersPage() {
+  const { t } = useTranslation()
   const [orders, setOrders] = useState<ShipdayOrder[]>([])
   const [filteredOrders, setFilteredOrders] = useState<ShipdayOrder[]>([])
   const [drivers, setDrivers] = useState<ShipdayDriver[]>([])
@@ -751,7 +753,7 @@ export function OrdersPage() {
       console.error("[v0] Error testing connection:", error)
       setMessage({ type: "error", text: "حدث خطأ أثناء اختبار الاتصال" })
       toast({
-        title: "خطأ",
+        title: t('common.error'),
         description: "حدث خطأ أثناء اختبار الاتصال",
         variant: "destructive",
       })

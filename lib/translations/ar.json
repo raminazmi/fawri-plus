@@ -58,7 +58,6 @@
     "date": "التاريخ",
     "total": "المجموع",
     "actions": "الإجراءات",
-    "pending": "في الانتظار",
     "confirmed": "مؤكد",
     "preparing": "قيد التحضير",
     "ready": "جاهز",
@@ -72,7 +71,12 @@
     "order": "طلب",
     "assigned": "تم التعيين",
     "pickedUp": "تم الاستلام",
-    "inTransit": "في الطريق"
+    "inTransit": "في الطريق",
+    "customerInitial": "ع",
+    "restaurantInitial": "م",
+    "completed": "مكتمل",
+    "inProgress": "قيد التنفيذ",
+    "pending": "قيد الانتظار"
   },
   "clients": {
     "title": "العملاء",
@@ -103,7 +107,9 @@
     "edit": "تعديل",
     "delete": "حذف",
     "available": "متاح",
-    "unavailable": "غير متاح"
+    "unavailable": "غير متاح",
+    "busy": "مشغول",
+    "offline": "غير متصل"
   },
   "reports": {
     "title": "التقارير",
@@ -181,6 +187,7 @@
     "export": "تصدير",
     "import": "استيراد",
     "refresh": "تحديث",
+    "refreshing": "جاري التحديث...",
     "back": "رجوع",
     "next": "التالي",
     "previous": "السابق",
@@ -196,6 +203,10 @@
     "switch": "تبديل اللغة",
     "arabic": "العربية",
     "english": "English"
+  },
+  "webhooks": {
+    "enabled": "مفعل",
+    "disabled": "معطل"
   },
   "dashboard": {
     "totalOrders": "إجمالي الطلبات",

@@ -26,12 +26,13 @@ import {
   UserPlus,
 } from "lucide-react"
 import Loading from "@/components/loading"
+import { useTranslation } from "@/lib/useTranslation"
 
-const statusLabels = {
-  available: "متاح",
-  busy: "مشغول",
-  offline: "غير متصل",
-} as const
+const getStatusLabels = (t: (key: string) => string) => ({
+  available: t('drivers.available'),
+  busy: t('drivers.busy'),
+  offline: t('drivers.offline'),
+}) as const
 
 const statusColors = {
   available: "default",
@@ -46,6 +47,8 @@ const statusIcons = {
 } as const
 
 export function DriversListPage() {
+  const { t } = useTranslation()
+  const statusLabels = getStatusLabels(t)
   const [drivers, setDrivers] = useState<ShipdayDriver[]>([])
   const [filteredDrivers, setFilteredDrivers] = useState<ShipdayDriver[]>([])
   const [loading, setLoading] = useState(true)
@@ -162,7 +165,7 @@ export function DriversListPage() {
               className="bg-white/20 hover:bg-white/30 text-[#272626] border-white/30 hover-lift"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
-              {refreshing ? "جاري التحديث..." : "تحديث"}
+              {refreshing ? t('common.refreshing') : t('common.refresh')}
             </Button>
             <Button 
               onClick={() => setShowAddDialog(true)}

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslation } from "@/lib/useTranslation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -9,6 +10,7 @@ import { CheckCircle, XCircle, Loader2, RefreshCw } from "lucide-react"
 import { getShipdaySDK, fetchOrders, fetchDrivers } from "@/lib/shipday-api-functions"
 
 export function ShipdayTest() {
+  const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [connectionStatus, setConnectionStatus] = useState<"idle" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")

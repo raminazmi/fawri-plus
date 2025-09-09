@@ -11,9 +11,11 @@ import { DateRange } from "react-day-picker"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2, Download } from "lucide-react"
 import { getReports, ReportData } from "@/lib/reports"
+import { useTranslation } from "@/lib/useTranslation"
 
 export function ReportsPage() {
   const { user } = useAuth()
+  const { t } = useTranslation()
   const [reports, setReports] = useState<ReportData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -42,7 +44,7 @@ export function ReportsPage() {
 
   const handleExport = () => {
     const csvContent = [
-      ["رقم الطلب", "العميل", "العنوان", "الحالة", "التاريخ", "المبلغ"].join(","),
+      [t('orders.orderNumber'), t('orders.client'), t('orders.address'), t('orders.status'), t('orders.date'), t('orders.total')].join(","),
       ...reports.map(report => [
         report.orderId,
         report.customerName,
@@ -170,12 +172,12 @@ export function ReportsPage() {
                           }`}
                         />
                         {report.status === "completed"
-                          ? "مكتمل"
+                          ? t('orders.completed')
                           : report.status === "in_progress"
-                          ? "قيد التنفيذ"
+                          ? t('orders.inProgress')
                           : report.status === "cancelled"
-                          ? "ملغي"
-                          : "قيد الانتظار"}
+                          ? t('orders.cancelled')
+                          : t('orders.pending')}
                       </div>
                     </TableCell>
                     <TableCell>{new Date(report.date).toLocaleDateString("ar")}</TableCell>

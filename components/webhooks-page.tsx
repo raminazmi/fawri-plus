@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslation } from "@/lib/useTranslation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -38,6 +39,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 
 export function WebhooksPage() {
+  const { t } = useTranslation()
   const [webhooks, setWebhooks] = useState<WebhookConfig[]>([])
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
@@ -59,7 +61,7 @@ export function WebhooksPage() {
   const handleAddWebhook = () => {
     if (!newWebhook.url) {
       toast({
-        title: "خطأ",
+        title: t('common.error'),
         description: "يرجى إدخال رابط Webhook",
         variant: "destructive",
       })
@@ -219,7 +221,7 @@ export function WebhooksPage() {
                     <Webhook className="h-5 w-5" />
                     <CardTitle className="text-lg">Webhook #{index + 1}</CardTitle>
                     <Badge variant={webhook.enabled ? "default" : "secondary"}>
-                      {webhook.enabled ? "مفعل" : "معطل"}
+                      {webhook.enabled ? t('webhooks.enabled') : t('webhooks.disabled')}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2">

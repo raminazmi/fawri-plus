@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { useAuth } from "@/hooks/use-auth"
+import { useTranslation } from "@/lib/useTranslation"
 import { hasPermission } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -25,20 +26,22 @@ interface NavigationItem {
   adminOnly?: boolean
 }
 
-const navigationItems: NavigationItem[] = [
-  { id: "dashboard", label: "لوحة التحكم", icon: LayoutDashboard, href: "/" },
-  { id: "orders", label: "إدارة الطلبات", icon: Package, href: "/orders" },
-  { id: "drivers", label: "متابعة السائقين", icon: Truck, href: "/drivers" },
-  { id: "subscriptions", label: "العملاء والمشتركين", icon: Users, href: "/subscriptions" },
-  // { id: "billing", label: "الفواتير والرسوم", icon: CreditCard, href: "/billing" },
-  // { id: "settings", label: "الإعدادات", icon: Settings, href: "/settings", adminOnly: true },
+const getNavigationItems = (t: (key: string) => string): NavigationItem[] => [
+  { id: "dashboard", label: t('navigation.dashboard'), icon: LayoutDashboard, href: "/" },
+  { id: "orders", label: t('navigation.orders'), icon: Package, href: "/orders" },
+  { id: "drivers", label: t('navigation.drivers'), icon: Truck, href: "/drivers" },
+  { id: "subscriptions", label: t('navigation.subscriptions'), icon: Users, href: "/subscriptions" },
+  // { id: "billing", label: t('navigation.billing'), icon: CreditCard, href: "/billing" },
+  // { id: "settings", label: t('navigation.settings'), icon: Settings, href: "/settings", adminOnly: true },
 ]
 
 export function DashboardLayout({ children, currentPage = "orders" }: DashboardLayoutProps) {
   const { user, logout } = useAuth()
+  const { t } = useTranslation()
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  const navigationItems = getNavigationItems(t)
   const filteredNavItems = navigationItems.filter((item) => !item.adminOnly || hasPermission(user, "admin_access"))
 
   const handleNavigation = (href: string) => {
@@ -96,7 +99,7 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
           </div>
           <div className="flex-1">
             <p className="font-medium text-white">{user?.username}</p>
-            <p className="text-sm text-white">{user?.role === "admin" ? "مدير" : "مشرف"}</p>
+            <p className="text-sm text-white">{user?.role === "admin" ? t('users.admin') : t('users.manager')}</p>
           </div>
           <Button 
             variant="ghost" 
@@ -163,7 +166,7 @@ export function DashboardLayout({ children, currentPage = "orders" }: DashboardL
                 </div>
                 <div className="hidden sm:block">
                   <p className="text-sm font-medium text-gray-900">{user?.username}</p>
-                  <p className="text-xs text-[#272626]">{user?.role === "admin" ? "مدير" : "مشرف"}</p>
+                  <p className="text-xs text-[#272626]">{user?.role === "admin" ? t('users.admin') : t('users.manager')}</p>
                 </div>
               </div>
             </div>
