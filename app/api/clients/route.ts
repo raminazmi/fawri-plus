@@ -6,12 +6,29 @@ export async function GET(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization")
     
+    if (!authHeader) {
+      return NextResponse.json(
+        { 
+          error: "Authentication required", 
+          details: "No authorization header provided"
+        },
+        { 
+          status: 401,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
+        }
+      )
+    }
+    
     const response = await fetch(`${API_BASE_URL}/clients`, {
       method: "GET",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        ...(authHeader && { "Authorization": authHeader }),
+        "Authorization": authHeader,
       },
       signal: AbortSignal.timeout(10000), // 10 second timeout
     })
