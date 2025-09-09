@@ -91,7 +91,7 @@ export function ShipdayTest() {
               ) : (
                 <XCircle className="h-3 w-3" />
               )}
-              {connectionStatus === "success" ? "متصل" : "غير متصل"}
+              {connectionStatus === "success" ? t('shipday.connected') : t('shipday.disconnected')}
             </Badge>
           )}
         </div>
