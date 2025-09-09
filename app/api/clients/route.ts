@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
         "Content-Type": "application/json",
         ...(authHeader && { "Authorization": authHeader }),
       },
+      signal: AbortSignal.timeout(10000), // 10 second timeout
     })
 
     if (!response.ok) {
